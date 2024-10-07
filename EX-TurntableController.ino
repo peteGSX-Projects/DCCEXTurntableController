@@ -23,7 +23,7 @@
 /*
 Include the required libraries
 */
-#include "CommandStationConnection.h"
+#include "CommandStationClient.h"
 #include "Defines.h"
 #include "Version.h"
 #include <Arduino.h>
@@ -35,8 +35,8 @@ void setup() {
   delay(3000);
   CONSOLE.print("EX-Turntable Controller ");
   CONSOLE.println(VERSION);
-  setupCSConnection(CONSOLE, CS_CONNECTION);
+  setupCSClient(CONSOLE, CS_CONNECTION);
 }
 
 /// @brief Main loop
-void loop() { processCSConnection(); }
+void loop() { processCSClient(); }

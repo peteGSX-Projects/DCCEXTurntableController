@@ -1,8 +1,10 @@
-# EXTTController
+# EX-TurntableController
 
 This is a controller for DCC-EX EX-Turntable utilising a rotary encoder and GC9A01 based round LCD to display turntable operations.
 
-This controller requires a serial connection to a DCC-EX EX-CommandStation as it operates as a throttle client utilising the turntable object to obtain turntable information and operate it.
+This controller requires a serial connection to a DCC-EX EX-CommandStation as it operates as a native protocol client utilising the turntable object to obtain turntable information and operate it.
+
+The rotary encoder is used to select a position to rotate the turntable to.
 
 The round display responds to turntable broadcasts/responses to update the position and status of the turntable.
 

@@ -15,18 +15,16 @@
  *  along with this code.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMANDSTATIONCONNECTION_H
-#define COMMANDSTATIONCONNECTION_H
+#include "CommandStationClient.h"
+#include "CommandStationListener.h"
 
-#include <Arduino.h>
-#include <DCCEXProtocol.h>
+DCCEXProtocol csClient;
+CSListener csListener;
 
-/// @brief Setup connection to EX-CommandStation
-/// @param consoleStream Reference to the console stream object
-/// @param csConnectionStream Reference to the CommandStation connection stream object
-void setupCSConnection(Stream &consoleStream, Stream &csConnectionStream);
+void setupCSClient(Stream &consoleStream, Stream &csConnectionStream) {
+  csClient.setLogStream(&consoleStream);
+  csClient.setDelegate(&csListener);
+  csClient.connect(&csConnectionStream);
+}
 
-/// @brief Process CommandStation connection for broadcasts/responses
-void processCSConnection();
-
-#endif // COMMANDSTATIONCONNECTION_H
+void processCSClient() { csClient.check(); }
