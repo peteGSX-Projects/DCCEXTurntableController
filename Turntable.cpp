@@ -15,32 +15,22 @@
  *  along with this code.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*
- *  This is a controller for a DCC-EX EX-Turntable, connecting via a serial interface
- *  to a DCC-EX EX-CommandStation.
- */
-
-/*
-Include the required libraries
-*/
 #include "CommandStationClient.h"
-#include "Defines.h"
-#include "DisplayFunctions.h"
-#include "Version.h"
-#include <Arduino.h>
+#include "Turntable.h"
 
-/// @brief Initial setup
-void setup() {
-  CONSOLE.begin(115200);
-  CS_CONNECTION.begin(115200);
-  delay(4000);
-  CONSOLE.print("EX-Turntable Controller ");
-  CONSOLE.println(VERSION);
-  setupCSClient(CONSOLE, CS_CONNECTION);
-}
-
-/// @brief Main loop
-void loop() {
-  processCSClient();
-  updateDisplay();
+void createTurntable() {
+  for (auto *turntable = csClient.turntables->getFirst(); turntable; turntable = turntable->getNext()) {
+    CONSOLE.print("Create turntable ID ");
+    CONSOLE.print(turntable->getId());
+    CONSOLE.print(" called ");
+    CONSOLE.println(turntable->getName());
+    CONSOLE.println("Positions:");
+    for (auto *position = turntable->getFirstIndex(); position; position = position->getNextIndex()) {
+      CONSOLE.print(position->getId());
+      CONSOLE.print(" at angle ");
+      CONSOLE.print(position->getAngle());
+      CONSOLE.print(" called ");
+      CONSOLE.println(position->getName());
+    }
+  }
 }

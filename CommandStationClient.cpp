@@ -41,7 +41,7 @@ void processCSClient() {
       retrieveTurntableRetries--;
       csClient.getLists(false, false, false, true);
       CONSOLE.println("Requesting turntable info");
-    } else if (!retrievalErrorDisplayed) {
+    } else if (!retrievalErrorDisplayed && retrieveTurntableRetries == 0) {
       retrievalErrorDisplayed = true;
       CONSOLE.println("Turntable info not received within the retry period");
     }

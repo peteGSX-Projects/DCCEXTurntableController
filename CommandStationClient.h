@@ -21,6 +21,8 @@
 #include <Arduino.h>
 #include <DCCEXProtocol.h>
 
+extern DCCEXProtocol csClient;
+
 /// @brief Setup EX-CommandStation client:
 /// - associates the console and CommandStation connections with the client object
 /// - sets up the listener for broadcasts/responses
