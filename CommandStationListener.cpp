@@ -15,7 +15,9 @@
  *  along with this code.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "CommandStationClient.h"
 #include "CommandStationListener.h"
+
 
 void CSListener::receivedServerVersion(int major, int minor, int patch) {
   CONSOLE.print("EX-CommandStation version: ");
@@ -24,4 +26,15 @@ void CSListener::receivedServerVersion(int major, int minor, int patch) {
   CONSOLE.print(minor);
   CONSOLE.print(".");
   CONSOLE.println(patch);
+}
+
+void CSListener::receivedTurntableList() { CONSOLE.println("Turntable info received, create it"); }
+
+void CSListener::receivedTurntableAction(int turntableId, int position, bool moving) {
+  CONSOLE.print("Turntable action ID|position|moving");
+  CONSOLE.print(turntableId);
+  CONSOLE.print("|");
+  CONSOLE.print(position);
+  CONSOLE.print("|");
+  CONSOLE.println(moving);
 }

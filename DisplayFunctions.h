@@ -15,32 +15,10 @@
  *  along with this code.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*
- *  This is a controller for a DCC-EX EX-Turntable, connecting via a serial interface
- *  to a DCC-EX EX-CommandStation.
- */
+#ifndef DISPLAYFUNCTIONS_H
+#define DISPLAYFUNCTIONS_H
 
-/*
-Include the required libraries
-*/
-#include "CommandStationClient.h"
-#include "Defines.h"
-#include "DisplayFunctions.h"
-#include "Version.h"
-#include <Arduino.h>
+/// @brief Placeholder to keep the display up to date
+void updateDisplay() {}
 
-/// @brief Initial setup
-void setup() {
-  CONSOLE.begin(115200);
-  CS_CONNECTION.begin(115200);
-  delay(3000);
-  CONSOLE.print("EX-Turntable Controller ");
-  CONSOLE.println(VERSION);
-  setupCSClient(CONSOLE, CS_CONNECTION);
-}
-
-/// @brief Main loop
-void loop() {
-  processCSClient();
-  updateDisplay();
-}
+#endif // DISPLAYFUNCTIONS_H

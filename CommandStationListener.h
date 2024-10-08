@@ -31,10 +31,13 @@ public:
   void receivedServerVersion(int major, int minor, int patch);
 
   /// @brief Print the turntable list to the console
-  // void receivedTurntableList();
+  void receivedTurntableList();
 
   /// @brief Print a turntable action to the console
-  // void receivedTurntableAction();
+  /// @param turntableId ID of the turntable associated with the move
+  /// @param position Position number being moved to
+  /// @param moving Boolean indicating if a move is in progress
+  void receivedTurntableAction(int turntableId, int position, bool moving);
 };
 
 #endif // COMMANDSTATIONLISTENER_H

@@ -21,12 +21,17 @@
 #include <Arduino.h>
 #include <DCCEXProtocol.h>
 
-/// @brief Setup EX-CommandStation client
+/// @brief Setup EX-CommandStation client:
+/// - associates the console and CommandStation connections with the client object
+/// - sets up the listener for broadcasts/responses
 /// @param consoleStream Reference to the console stream object
 /// @param csConnectionStream Reference to the CommandStation connection stream object
 void setupCSClient(Stream &consoleStream, Stream &csConnectionStream);
 
-/// @brief Process CommandStation client for broadcasts/responses
+/// @brief Process CommandStation client to listen for broadcasts/responses:
+/// - requests lists from CommandStation if not received
+/// - retries up to 5 times
+/// - 2 second delay between retries
 void processCSClient();
 
 #endif // COMMANDSTATIONCLIENT_H
