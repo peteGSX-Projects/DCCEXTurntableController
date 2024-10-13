@@ -17,7 +17,7 @@
 
 #include "CommandStationClient.h"
 #include "CommandStationListener.h"
-#include "Turntable.h"
+#include "DisplayFunctions.h"
 
 void CSListener::receivedServerVersion(int major, int minor, int patch) {
   CONSOLE.print("EX-CommandStation version: ");
@@ -30,11 +30,11 @@ void CSListener::receivedServerVersion(int major, int minor, int patch) {
 
 void CSListener::receivedTurntableList() {
   CONSOLE.println("Turntable info received, create it");
-  createTurntable();
+  createTurntableDisplay();
 }
 
 void CSListener::receivedTurntableAction(int turntableId, int position, bool moving) {
-  CONSOLE.print("Turntable action ID|position|moving");
+  CONSOLE.println("Turntable action ID|position|moving");
   CONSOLE.print(turntableId);
   CONSOLE.print("|");
   CONSOLE.print(position);

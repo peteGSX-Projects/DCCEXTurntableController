@@ -18,7 +18,13 @@
 #ifndef DISPLAYFUNCTIONS_H
 #define DISPLAYFUNCTIONS_H
 
+/// @brief Set initial display state - show version then clear
+void setupDisplay();
+
+/// @brief Create the turntable display when info is received
+void createTurntableDisplay();
+
 /// @brief Placeholder to keep the display up to date
-void updateDisplay() {}
+void updateDisplay();
 
 #endif // DISPLAYFUNCTIONS_H

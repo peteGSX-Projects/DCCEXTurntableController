@@ -18,6 +18,8 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+#include <TFT_eSPI.h>
+
 /*
 If we haven't got a custom config.h, use the example
 */
@@ -53,23 +55,47 @@ If not defined in myConfig.h, define the rotary encoder pins here
 /*
 If not defined in myConfig.h, define the GC9A01 display pins here
 */
-#ifndef GC9A01_DIN
-#define GC9A01_DIN PA7
-#endif // GC9A01_DIN
-#ifndef GC9A01_CLK
-#define GC9A01_CLK PA5
-#endif // GC9A01_CLK
-#ifndef GC9A01_CS
-#define GC9A01_CS PA4
-#endif // GC9A01_CS
-#ifndef GC9A01_DC
-#define GC9A01_DC PA3
-#endif // GC9A01_DC
-#ifndef GC9A01_RST
-#define GC9A01_RST PA2
-#endif // GC9A01_RST
 #ifndef GC9A01_BL
 #define GC9A01_BL PA1
 #endif // GC9A01_BL
+
+/*
+If not defined in myConfig.h, define GC9A01 default options here
+*/
+#ifndef GC9A01_ROTATION
+#define GC9A01_ROTATION 0
+#endif // GC9A01_ROTATION
+
+/*
+If not defined in myConfig.h, define default colours here
+*/
+#ifndef BACKGROUND_COLOUR
+#define BACKGROUND_COLOUR TFT_BLACK
+#endif // BACKGROUND_COLOUR
+#ifndef TEXT_COLOUR
+#define TEXT_COLOUR TFT_GREENYELLOW
+#endif // TEXT_COLOUR
+#ifndef BRIDGE_COLOUR
+#define BRIDGE_COLOUR TFT_RED
+#endif // BRIDGE_COLOUR
+#ifndef PIT_COLOUR
+#define PIT_COLOUR TFT_BLUE
+#endif // PIT_COLOUR
+#ifndef BRIDGE_POSITION_COLOUR
+#define BRIDGE_POSITION_COLOUR TFT_YELLOW
+#endif // BRIDGE_POSITION_COLOUR
+#ifndef HOME_COLOUR
+#define HOME_COLOUR TFT_CYAN
+#endif // HOME_COLOUR
+#ifndef POSITION_COLOUR
+#define POSITION_COLOUR TFT_MAGENTA
+#endif // POSITION_COLOUR
+
+/*
+If not defined in myConfig.h, define turntable display parameters here
+*/
+#ifndef PIT_OFFSET
+#define PIT_OFFSET 30
+#endif // PIT_OFFSET
 
 #endif // DEFINES_H
