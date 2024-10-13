@@ -23,9 +23,9 @@ TurntableDisplay::TurntableDisplay(TFT_eSPI &display, Turntable &dccexTurntable,
                                    uint16_t bridgeColour, uint16_t bridgePositionColour)
     : _display(display), _dccexTurntable(dccexTurntable), _backgroundColour(backgroundColour),
       _bridgeColour(bridgeColour), _bridgePositionColour(bridgePositionColour) {
+  _bridgePosition = 255; // Set to max to ensure first redraw of the bridge will occur
   _drawTurntable(pitOffset, pitColour, homeColour, positionColour);
   drawBridge();
-  _bridgePosition = 255; // Set to max to ensure first redraw of the bridge will occur
 }
 
 void TurntableDisplay::drawBridge() {
@@ -34,8 +34,8 @@ void TurntableDisplay::drawBridge() {
   if (_bridgePosition != newPosition) {
     _bridgePosition = newPosition;
     uint8_t currentPosition = _dccexTurntable.getIndex();
-    char *positionName;
-    uint16_t positionAngle;
+    char *positionName = nullptr;
+    uint16_t positionAngle = 0;
     for (TurntableIndex *index = _dccexTurntable.getFirstIndex(); index; index = index->getNextIndex()) {
       if (index->getId() == currentPosition) {
         positionName = index->getName();
@@ -43,7 +43,7 @@ void TurntableDisplay::drawBridge() {
         break;
       }
     }
-    CONSOLE.print("Need to draw bridge position|name|angle");
+    CONSOLE.println("Need to draw bridge position|name|angle");
     CONSOLE.print(newPosition);
     CONSOLE.print("|");
     CONSOLE.print(positionName);
