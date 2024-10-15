@@ -18,39 +18,48 @@
 #include "Defines.h"
 #include "TurntableDisplay.h"
 
-TurntableDisplay::TurntableDisplay(TFT_eSPI &display, Turntable &dccexTurntable, uint16_t backgroundColour,
+TurntableDisplay::TurntableDisplay(TFT_eSPI &display, DCCEXProtocol &csClient, uint16_t backgroundColour,
                                    uint8_t pitOffset, uint16_t pitColour, uint16_t homeColour, uint16_t positionColour,
                                    uint16_t bridgeColour, uint16_t bridgePositionColour)
-    : _display(display), _dccexTurntable(dccexTurntable), _backgroundColour(backgroundColour),
-      _bridgeColour(bridgeColour), _bridgePositionColour(bridgePositionColour) {
+    : _display(display), _csClient(csClient), _backgroundColour(backgroundColour), _pitOffset(pitOffset),
+      _pitColour(pitColour), _homeColour(homeColour), _positionColour(positionColour), _bridgeColour(bridgeColour),
+      _bridgePositionColour(bridgePositionColour) {
   _bridgePosition = 255; // Set to max to ensure first redraw of the bridge will occur
-  _drawTurntable(pitOffset, pitColour, homeColour, positionColour);
-  drawBridge();
 }
 
-void TurntableDisplay::drawBridge() {
-  _display.fillScreen(_backgroundColour);
-  uint8_t newPosition = _dccexTurntable.getIndex();
-  if (_bridgePosition != newPosition) {
-    _bridgePosition = newPosition;
-    uint8_t currentPosition = _dccexTurntable.getIndex();
-    char *positionName = nullptr;
-    uint16_t positionAngle = 0;
-    for (TurntableIndex *index = _dccexTurntable.getFirstIndex(); index; index = index->getNextIndex()) {
-      if (index->getId() == currentPosition) {
-        positionName = index->getName();
-        positionAngle = index->getAngle();
-        break;
-      }
-    }
-    CONSOLE.println("Need to draw bridge position|name|angle");
-    CONSOLE.print(newPosition);
-    CONSOLE.print("|");
-    CONSOLE.print(positionName);
-    CONSOLE.print("|");
-    CONSOLE.println(positionAngle);
+void TurntableDisplay::begin() {
+  Turntable *turntable = _csClient.turntables->getFirst();
+  if (turntable) {
+    _drawTurntable();
+    drawBridge();
   }
 }
 
-void TurntableDisplay::_drawTurntable(uint8_t pitOffset, uint16_t pitColour, uint16_t homeColour,
-                                      uint16_t positionColour) {}
+void TurntableDisplay::drawBridge() {
+  Turntable *turntable = _csClient.turntables->getFirst();
+  if (turntable) {
+    uint8_t newPosition = turntable->getIndex();
+    if (_bridgePosition != newPosition) {
+      _display.fillScreen(_backgroundColour);
+      _bridgePosition = newPosition;
+      uint8_t currentPosition = turntable->getIndex();
+      char *positionName = nullptr;
+      uint16_t positionAngle = 0;
+      for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
+        if (index->getId() == currentPosition) {
+          positionName = index->getName();
+          positionAngle = index->getAngle();
+          break;
+        }
+      }
+      CONSOLE.println("Need to draw bridge position|name|angle");
+      CONSOLE.print(newPosition);
+      CONSOLE.print("|");
+      CONSOLE.print(positionName);
+      CONSOLE.print("|");
+      CONSOLE.println(positionAngle);
+    }
+  }
+}
+
+void TurntableDisplay::_drawTurntable() {}

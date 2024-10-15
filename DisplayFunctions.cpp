@@ -24,6 +24,9 @@
 #include <TFT_eSPI.h>
 
 TFT_eSPI display = TFT_eSPI();
+TurntableDisplay turntableDisplay =
+    TurntableDisplay(display, csClient, BACKGROUND_COLOUR, PIT_OFFSET, PIT_COLOUR, HOME_COLOUR, POSITION_COLOUR,
+                     BRIDGE_COLOUR, BRIDGE_POSITION_COLOUR);
 
 void setupDisplay() {
   display.begin();
@@ -45,11 +48,6 @@ void setupDisplay() {
   display.print("Waiting for info...");
 }
 
-void createTurntableDisplay() {
-  auto *turntable = csClient.turntables->getFirst();
-  TurntableDisplay turntableDisplay =
-      TurntableDisplay(display, *turntable, BACKGROUND_COLOUR, PIT_OFFSET, PIT_COLOUR, HOME_COLOUR, POSITION_COLOUR,
-                       BRIDGE_COLOUR, BRIDGE_POSITION_COLOUR);
-}
+void createTurntableDisplay() { turntableDisplay.begin(); }
 
-void updateDisplay() {}
+void updateDisplay() { turntableDisplay.drawBridge(); }
