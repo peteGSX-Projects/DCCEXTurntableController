@@ -29,22 +29,29 @@ TurntableDisplay turntableDisplay =
                      BRIDGE_COLOUR, BRIDGE_POSITION_COLOUR);
 
 void setupDisplay() {
-  display.begin();
+  display.init();
 #if defined(GC9A01_BL)
   pinMode(GC9A01_BL, OUTPUT);
   digitalWrite(GC9A01_BL, HIGH);
 #endif
+  const GFXfont *gfxFont = TEXT_FONT;
+  display.setRotation(GC9A01_ROTATION);
   display.fillScreen(BACKGROUND_COLOUR);
   display.setTextSize(1);
+  display.setFreeFont(gfxFont);
   display.setTextColor(TEXT_COLOUR);
-  uint16_t x = display.width() / 2 - 75;
-  uint16_t y = display.height() / 2 - 20;
+  uint8_t fontHeight = gfxFont->yAdvance;
+  uint8_t fontWidth = display.textWidth("A");
+  uint16_t x = (display.width() / 2) - (fontWidth * 20 / 2);
+  uint16_t y = (display.height() / 2) - (fontHeight * 4 / 2);
   display.setCursor(x, y);
-  display.print("DCC-EX Turntable Controller");
-  display.setCursor(x, y + 10);
+  display.print("DCC-EX");
+  display.setCursor(x, y+= fontHeight);
+  display.print("Turntable Controller");
+  display.setCursor(x, y += fontHeight);
   display.print("Version: ");
   display.print(VERSION);
-  display.setCursor(x, y + 20);
+  display.setCursor(x, y += fontHeight);
   display.print("Waiting for info...");
 }
 

@@ -24,7 +24,10 @@ TurntableDisplay::TurntableDisplay(TFT_eSPI &display, DCCEXProtocol &csClient, u
     : _display(display), _csClient(csClient), _backgroundColour(backgroundColour), _pitOffset(pitOffset),
       _pitColour(pitColour), _homeColour(homeColour), _positionColour(positionColour), _bridgeColour(bridgeColour),
       _bridgePositionColour(bridgePositionColour) {
-  _bridgePosition = 255; // Set to max to ensure first redraw of the bridge will occur
+  _bridgePosition = 255;                // Set to max to ensure first redraw of the bridge will occur
+  const GFXfont *gfxFont = TEXT_FONT;   // Set font from macro TEXT_FONT, no way to get it from the display object
+  _fontHeight = gfxFont->yAdvance;      // Get the font height
+  _fontWidth = _display.textWidth("A"); // Get the font width
 }
 
 void TurntableDisplay::begin() {
@@ -52,14 +55,28 @@ void TurntableDisplay::drawBridge() {
           break;
         }
       }
-      CONSOLE.println("Need to draw bridge position|name|angle");
+      Coordinates stringPosition = _getTextPosition(positionName);
+      _display.drawString(positionName, stringPosition.x, stringPosition.y);
+      CONSOLE.println("Need to draw bridge position|name|angle|x|y");
       CONSOLE.print(newPosition);
       CONSOLE.print("|");
       CONSOLE.print(positionName);
       CONSOLE.print("|");
-      CONSOLE.println(positionAngle);
+      CONSOLE.print(positionAngle);
+      CONSOLE.print("|");
+      CONSOLE.print(stringPosition.x);
+      CONSOLE.print("|");
+      CONSOLE.println(stringPosition.y);
     }
   }
 }
 
 void TurntableDisplay::_drawTurntable() {}
+
+Coordinates TurntableDisplay::_getTextPosition(const char *text) {
+  Coordinates coordinates;
+  uint16_t textWidth = strlen(text) * _fontWidth;
+  coordinates.x = ((_display.width() / 2) - (textWidth / 2));
+  coordinates.y = (_display.height() / 2) - (_fontHeight / 2);
+  return coordinates;
+}

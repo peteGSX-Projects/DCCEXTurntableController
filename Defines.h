@@ -92,6 +92,13 @@ If not defined in myConfig.h, define default colours here
 #endif // POSITION_COLOUR
 
 /*
+If not defined in myConfig.h, define the text font here
+*/
+#ifndef TEXT_FONT
+#define TEXT_FONT &FreeMono9pt7b
+#endif // TEXT_FONT
+
+/*
 If not defined in myConfig.h, define turntable display parameters here
 */
 #ifndef PIT_OFFSET
