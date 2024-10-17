@@ -39,7 +39,7 @@ void setupDisplay() {
   display.fillScreen(BACKGROUND_COLOUR);
   display.setTextSize(1);
   display.setFreeFont(gfxFont);
-  display.setTextColor(TEXT_COLOUR);
+  display.setTextColor(TEXT_COLOUR, BACKGROUND_COLOUR);
   uint8_t fontHeight = gfxFont->yAdvance;
   uint8_t fontWidth = display.textWidth("A");
   uint16_t x = (display.width() / 2) - (fontWidth * 20 / 2);

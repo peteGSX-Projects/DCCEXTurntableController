@@ -28,13 +28,10 @@ void CSListener::receivedServerVersion(int major, int minor, int patch) {
   CONSOLE.println(patch);
 }
 
-void CSListener::receivedTurntableList() {
-  CONSOLE.println("Turntable info received, create it");
-  createTurntableDisplay();
-}
+void CSListener::receivedTurntableList() { createTurntableDisplay(); }
 
 void CSListener::receivedTurntableAction(int turntableId, int position, bool moving) {
-  CONSOLE.println("Turntable action ID|position|moving");
+  CONSOLE.print("Turntable action ID|position|moving: ");
   CONSOLE.print(turntableId);
   CONSOLE.print("|");
   CONSOLE.print(position);

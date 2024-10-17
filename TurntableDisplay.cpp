@@ -43,7 +43,6 @@ void TurntableDisplay::drawBridge() {
   if (turntable) {
     uint8_t newPosition = turntable->getIndex();
     if (_bridgePosition != newPosition) {
-      _display.fillScreen(_backgroundColour);
       _bridgePosition = newPosition;
       uint8_t currentPosition = turntable->getIndex();
       char *positionName = nullptr;
@@ -57,7 +56,7 @@ void TurntableDisplay::drawBridge() {
       }
       Coordinates stringPosition = _getTextPosition(positionName);
       _display.drawString(positionName, stringPosition.x, stringPosition.y);
-      CONSOLE.println("Need to draw bridge position|name|angle|x|y");
+      CONSOLE.print("Draw bridge position|name|angle|x|y: ");
       CONSOLE.print(newPosition);
       CONSOLE.print("|");
       CONSOLE.print(positionName);
@@ -71,7 +70,23 @@ void TurntableDisplay::drawBridge() {
   }
 }
 
-void TurntableDisplay::_drawTurntable() {}
+void TurntableDisplay::_drawTurntable() {
+  _display.fillScreen(_backgroundColour);
+  uint16_t x = _display.width() / 2;
+  uint16_t y = _display.height() / 2;
+  uint16_t radius = min(x, y) - _pitOffset;
+  CONSOLE.print("Draw pit x|y|outer radius|inner radius: ");
+  CONSOLE.print(x);
+  CONSOLE.print("|");
+  CONSOLE.print(y);
+  CONSOLE.print("|");
+  CONSOLE.print(radius);
+  _display.fillCircle(x, y, radius, _pitColour);
+  radius -= 3;
+  CONSOLE.print("|");
+  CONSOLE.println(radius);
+  _display.fillCircle(x, y, radius, _backgroundColour);  
+}
 
 Coordinates TurntableDisplay::_getTextPosition(const char *text) {
   Coordinates coordinates;
