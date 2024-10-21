@@ -15,35 +15,28 @@
  *  along with this code.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*
- *  This is a controller for a DCC-EX EX-Turntable, connecting via a serial interface
- *  to a DCC-EX EX-CommandStation.
- */
-
-/*
-Include the required libraries
-*/
-#include "CommandStationClient.h"
-#include "Defines.h"
-#include "DisplayFunctions.h"
 #include "InputFunctions.h"
-#include "Version.h"
-#include <Arduino.h>
+#include "Rotary.h"
+#include "avdweb_Switch.h"
 
-/// @brief Initial setup
-void setup() {
-  CONSOLE.begin(115200);
-  CS_CONNECTION.begin(115200);
-  setupDisplay();
-  delay(4000);
-  CONSOLE.print("EX-Turntable Controller ");
-  CONSOLE.println(VERSION);
-  setupCSClient(CONSOLE, CS_CONNECTION);
-}
+Rotary encoder = Rotary(ROTARY_DT, ROTARY_CLK);
+Switch encoderButton(ROTARY_BTN);
 
-/// @brief Main loop
-void loop() {
-  processCSClient();
-  updateDisplay();
-  processInput();
+void processInput() {
+  encoderButton.poll();
+  if (encoderButton.singleClick()) {
+    CONSOLE.println("Single click");
+  }
+  if (encoderButton.doubleClick()) {
+    CONSOLE.println("Double click");
+  }
+  if (encoderButton.longPress()) {
+    CONSOLE.println("Long press");
+  }
+  byte direction = encoder.process();
+  if (direction == DIR_CW) {
+    CONSOLE.println("Clockwise");
+  } else if (direction == DIR_CCW) {
+    CONSOLE.println("Counter-clockwise");
+  }
 }

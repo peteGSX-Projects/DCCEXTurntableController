@@ -40,7 +40,7 @@ If not defined in myConfig.h, define the console and DCC-EX client connection st
 #endif // CS_CONNECTION
 
 /*
-If not defined in myConfig.h, define the rotary encoder pins here
+If not defined in myConfig.h, define the rotary encoder pins and options here
 */
 #ifndef ROTARY_BTN
 #define ROTARY_BTN PB15
@@ -51,6 +51,9 @@ If not defined in myConfig.h, define the rotary encoder pins here
 #ifndef ROTARY_CLK
 #define ROTARY_CLK PB13
 #endif // ROTARY_CLK
+#ifndef FULL_STEP
+#define HALF_STEP
+#endif // FULL_STEP
 
 /*
 If not defined in myConfig.h, define the GC9A01 display pins here
