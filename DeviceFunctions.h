@@ -15,29 +15,11 @@
  *  along with this code.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "DeviceFunctions.h"
-#include "InputFunctions.h"
-#include "Rotary.h"
-#include "avdweb_Switch.h"
+#ifndef DEVICEFUNCTIONS_H
+#define DEVICEFUNCTIONS_H
 
-Rotary encoder = Rotary(ROTARY_DT, ROTARY_CLK);
-Switch encoderButton(ROTARY_BTN);
+#include <Arduino.h>
 
-void processInput() {
-  encoderButton.poll();
-  if (encoderButton.singleClick()) {
-    CONSOLE.println("Select position");
-  }
-  if (encoderButton.doubleClick()) {
-    CONSOLE.println("Home");
-  }
-  if (encoderButton.longPress()) {
-    resetDevice();
-  }
-  byte direction = encoder.process();
-  if (direction == DIR_CW) {
-    CONSOLE.println("Clockwise");
-  } else if (direction == DIR_CCW) {
-    CONSOLE.println("Counter-clockwise");
-  }
-}
+void resetDevice();
+
+#endif // DEVICEFUNCTIONS_H
