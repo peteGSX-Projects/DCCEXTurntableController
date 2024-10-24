@@ -41,11 +41,12 @@ public:
                    uint16_t pitColour, uint16_t homeColour, uint16_t positionColour, uint16_t bridgeColour,
                    uint16_t bridgePositionColour);
 
-  /// @brief Draws the initial turntable and bridge position, should only be called when lists have been received
+  /// @brief Draws the initial turntable and bridge position, only to be called when lists have been received
   void begin();
 
-  /// @brief Draw the turntable bridge at the selected position
-  void drawBridge();
+  /// @brief Update the display - call this at least once per main loop iteration
+  /// @param updateTime Current time in ms
+  void update(unsigned long updateTime);
 
 private:
   TFT_eSprite &_displaySprite; // Reference to an existing TFT_eSprite object
@@ -57,9 +58,14 @@ private:
   uint16_t _positionColour;    // Colour of position indicators
   uint8_t _bridgePosition;     // Current position of the bridge, compare with broadcasts to prevent unnecessary redraws
   uint16_t _bridgeColour;      // 16 bit colour of the bridge
-  uint16_t _bridgePositionColour; // 16 bit colour of the end of the bridge aligned with the position
-  uint8_t _fontWidth;             // Used to determine text positioning later
-  uint8_t _fontHeight;            // Used to determine text positioning later
+  uint16_t _bridgePositionColour;         // 16 bit colour of the end of the bridge aligned with the position
+  uint8_t _fontWidth;                     // Used to determine text positioning later
+  uint8_t _fontHeight;                    // Used to determine text positioning later
+  static const unsigned long _blinkDelay; // Delay in ms for blinking when moving
+  unsigned long _lastBlink;               // Last time in ms a blink occurred
+
+  /// @brief Draw the turntable bridge at the specified position
+  void _drawBridge(uint8_t position);
 
   /// @brief Draws the basic turntable on screen
   void _drawTurntable();

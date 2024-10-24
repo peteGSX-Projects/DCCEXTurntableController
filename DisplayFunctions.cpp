@@ -47,7 +47,7 @@ void setupDisplay() {
   uint16_t y = (display.height() / 2) - (fontHeight * 4 / 2);
   display.setCursor(x, y);
   display.print("DCC-EX");
-  display.setCursor(x, y+= fontHeight);
+  display.setCursor(x, y += fontHeight);
   display.print("Turntable Controller");
   display.setCursor(x, y += fontHeight);
   display.print("Version: ");
@@ -59,4 +59,7 @@ void setupDisplay() {
 
 void createTurntableDisplay() { turntableDisplay.begin(); }
 
-void updateDisplay() { turntableDisplay.drawBridge(); }
+void updateDisplay() {
+  unsigned long currentTime = millis();
+  turntableDisplay.update(currentTime);
+}

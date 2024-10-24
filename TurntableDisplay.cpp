@@ -24,7 +24,7 @@ TurntableDisplay::TurntableDisplay(TFT_eSprite &displaySprite, DCCEXProtocol &cs
     : _displaySprite(displaySprite), _csClient(csClient), _backgroundColour(backgroundColour), _pitOffset(pitOffset),
       _pitColour(pitColour), _homeColour(homeColour), _positionColour(positionColour), _bridgeColour(bridgeColour),
       _bridgePositionColour(bridgePositionColour) {
-  _bridgePosition = 255;                      // Set to max to ensure first redraw of the bridge will occur
+  _bridgePosition = 0;                        // Start at home, will update once begin called
   const GFXfont *gfxFont = TEXT_FONT;         // Set font from macro TEXT_FONT, no way to get it from the display object
   _fontHeight = gfxFont->yAdvance;            // Get the font height
   _fontWidth = _displaySprite.textWidth("A"); // Get the font width
@@ -34,11 +34,13 @@ void TurntableDisplay::begin() {
   Turntable *turntable = _csClient.turntables->getFirst();
   if (turntable) {
     _drawTurntable();
-    // drawBridge();
+    _drawBridge(0);
   }
 }
 
-void TurntableDisplay::drawBridge() {
+void update(unsigned long updateTime) {}
+
+void TurntableDisplay::_drawBridge(uint8_t position) {
   // Turntable *turntable = _csClient.turntables->getFirst();
   // if (turntable) {
   //   uint8_t newPosition = turntable->getIndex();
@@ -71,10 +73,7 @@ void TurntableDisplay::drawBridge() {
 }
 
 void TurntableDisplay::_drawTurntable() {
-  // _display.fillScreen(_backgroundColour);
   _displaySprite.fillSprite(_backgroundColour);
-  // uint16_t x = _display.width() / 2;
-  // uint16_t y = _display.height() / 2;
   uint16_t x = _displaySprite.width() / 2;
   uint16_t y = _displaySprite.height() / 2;
   uint16_t radius = min(x, y) - _pitOffset;
@@ -84,12 +83,10 @@ void TurntableDisplay::_drawTurntable() {
   CONSOLE.print(y);
   CONSOLE.print("|");
   CONSOLE.print(radius);
-  // _display.fillCircle(x, y, radius, _pitColour);
   _displaySprite.fillSmoothCircle(x, y, radius, _pitColour, _backgroundColour);
   radius -= 3;
   CONSOLE.print("|");
   CONSOLE.println(radius);
-  // _display.fillCircle(x, y, radius, _backgroundColour);
   _displaySprite.fillSmoothCircle(x, y, radius, _backgroundColour);
   _displaySprite.pushSprite(0, 0);
 }
@@ -97,8 +94,6 @@ void TurntableDisplay::_drawTurntable() {
 Coordinates TurntableDisplay::_getTextPosition(const char *text) {
   Coordinates coordinates;
   uint16_t textWidth = strlen(text) * _fontWidth;
-  // coordinates.x = ((_display.width() / 2) - (textWidth / 2));
-  // coordinates.y = (_display.height() / 2) - (_fontHeight / 2);
   coordinates.x = ((_displaySprite.width() / 2) - (textWidth / 2));
   coordinates.y = (_displaySprite.height() / 2) - (_fontHeight / 2);
   return coordinates;
