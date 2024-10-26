@@ -23,7 +23,8 @@
 /*
 0.0.1 includes:
   - Initial version
-  - Request first defined turntable object from EX-CS
+  - Request and control first defined turntable object from EX-CS
+  - Basic control implemented without display elements
 */
 
 #endif  // VERSION_H

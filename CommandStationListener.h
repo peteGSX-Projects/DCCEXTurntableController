@@ -24,13 +24,7 @@
 
 class CSListener : public DCCEXProtocolDelegate {
 public:
-  /// @brief Displays the received server version in the console
-  /// @param major Major version number
-  /// @param minor Minor version number
-  /// @param patch Patch version number
-  void receivedServerVersion(int major, int minor, int patch);
-
-  /// @brief Print the turntable list to the console
+  /// @brief Create the TurntableDisplay object once the turntable info is received
   void receivedTurntableList();
 
   /// @brief Print a turntable action to the console

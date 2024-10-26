@@ -45,5 +45,6 @@ void setup() {
 void loop() {
   processCSClient();
   updateDisplay();
-  processInput();
+  processEncoderButton();
+  processEncoder();
 }

@@ -25,7 +25,7 @@
 Rotary encoder = Rotary(ROTARY_DT, ROTARY_CLK);
 Switch encoderButton(ROTARY_BTN);
 
-void processInput() {
+void processEncoderButton() {
   encoderButton.poll();
   if (encoderButton.singleClick()) {
     sendPositionChange();
@@ -36,6 +36,9 @@ void processInput() {
   if (encoderButton.longPress()) {
     resetDevice();
   }
+}
+
+void processEncoder() {
   byte direction = encoder.process();
   if (direction == DIR_CW) {
     turntableDisplay.setNextPosition();

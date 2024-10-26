@@ -21,8 +21,11 @@
 #include "Defines.h"
 #include <Arduino.h>
 
-/// @brief Process all input methods
-void processInput();
+/// @brief Process rotary encoder button input method
+void processEncoderButton();
+
+/// @brief Process rotary encoder input method
+void processEncoder();
 
 /// @brief Send a position change to the CommandStation on single click
 void sendPositionChange();

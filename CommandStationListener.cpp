@@ -19,15 +19,6 @@
 #include "CommandStationListener.h"
 #include "DisplayFunctions.h"
 
-void CSListener::receivedServerVersion(int major, int minor, int patch) {
-  CONSOLE.print("EX-CommandStation version: ");
-  CONSOLE.print(major);
-  CONSOLE.print(".");
-  CONSOLE.print(minor);
-  CONSOLE.print(".");
-  CONSOLE.println(patch);
-}
-
 void CSListener::receivedTurntableList() { createTurntableDisplay(); }
 
 void CSListener::receivedTurntableAction(int turntableId, int position, bool moving) {
