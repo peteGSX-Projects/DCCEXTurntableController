@@ -64,8 +64,8 @@ private:
   static const unsigned long _blinkDelay; // Delay in ms for blinking when moving
   unsigned long _lastBlink;               // Last time in ms a blink occurred
 
-  /// @brief Draw the turntable bridge at the specified position
-  void _drawBridge(uint8_t position);
+  /// @brief Draw the currently selected position's name on screen
+  void _drawPositionName(uint8_t position);
 
   /// @brief Draws the basic turntable on screen
   void _drawTurntable();

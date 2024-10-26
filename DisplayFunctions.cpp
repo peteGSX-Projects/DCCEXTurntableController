@@ -35,26 +35,37 @@ void setupDisplay() {
   pinMode(GC9A01_BL, OUTPUT);
   digitalWrite(GC9A01_BL, HIGH);
 #endif
-  const GFXfont *gfxFont = TEXT_FONT;
+  const GFXfont *dccexFont = DCCEX_FONT;
+  const GFXfont *textFont = TEXT_FONT;
   display.setRotation(GC9A01_ROTATION);
-  display.fillScreen(BACKGROUND_COLOUR);
-  display.setTextSize(1);
-  display.setFreeFont(gfxFont);
-  display.setTextColor(TEXT_COLOUR, BACKGROUND_COLOUR);
-  uint8_t fontHeight = gfxFont->yAdvance;
-  uint8_t fontWidth = display.textWidth("A");
-  uint16_t x = (display.width() / 2) - (fontWidth * 20 / 2);
-  uint16_t y = (display.height() / 2) - (fontHeight * 4 / 2);
-  display.setCursor(x, y);
-  display.print("DCC-EX");
-  display.setCursor(x, y += fontHeight);
-  display.print("Turntable Controller");
-  display.setCursor(x, y += fontHeight);
-  display.print("Version: ");
-  display.print(VERSION);
-  display.setCursor(x, y += fontHeight);
-  display.print("Waiting for info...");
   displaySprite.createSprite(display.width(), display.height());
+  display.setFreeFont(dccexFont);
+  display.fillScreen(DCCEX_BACKGROUND);
+  uint8_t dccexFontHeight = dccexFont->yAdvance;
+  uint8_t fontHeight = textFont->yAdvance;
+  uint16_t x = display.width() / 2;
+  uint16_t y = (display.height() / 2) - (dccexFontHeight + (fontHeight * 3) / 2);
+  display.setTextDatum(MC_DATUM);
+  display.setTextSize(1);
+  uint16_t dccWidth = display.textWidth("DCC-");
+  uint16_t exWidth = display.textWidth("EX");
+  display.setTextColor(DCCEX_DCC, DCCEX_BACKGROUND);
+  display.drawString("DCC-", x - (exWidth / 2), y);
+  display.setTextColor(DCCEX_EX, DCCEX_BACKGROUND);
+  display.drawString("EX", x - (dccWidth / 2) + dccWidth, y);
+  y += (fontHeight * 2);
+  display.setFreeFont(textFont);
+  display.setTextColor(DCCEX_DCC, DCCEX_BACKGROUND);
+  display.drawString("Turntable Controller", x, y);
+  y += fontHeight;
+  uint16_t versionTextWidth = display.textWidth("Version: ");
+  uint16_t versionWidth = display.textWidth(VERSION);
+  display.drawString("Version: ", x - (versionWidth /2), y);
+  display.setTextColor(DCCEX_EX, DCCEX_BACKGROUND);
+  display.drawString(VERSION, x - (versionTextWidth /2) + versionTextWidth, y);
+  y += fontHeight;
+  display.setTextColor(DCCEX_DCC, DCCEX_BACKGROUND);
+  display.drawString("Waiting...", x, y);
 }
 
 void createTurntableDisplay() { turntableDisplay.begin(); }

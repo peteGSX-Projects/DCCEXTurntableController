@@ -34,42 +34,42 @@ void TurntableDisplay::begin() {
   Turntable *turntable = _csClient.turntables->getFirst();
   if (turntable) {
     _drawTurntable();
-    _drawBridge(0);
+    _drawPositionName(0);
   }
 }
 
-void update(unsigned long updateTime) {}
+void TurntableDisplay::update(unsigned long updateTime) {}
 
-void TurntableDisplay::_drawBridge(uint8_t position) {
-  // Turntable *turntable = _csClient.turntables->getFirst();
-  // if (turntable) {
-  //   uint8_t newPosition = turntable->getIndex();
-  //   if (_bridgePosition != newPosition) {
-  //     _bridgePosition = newPosition;
-  //     uint8_t currentPosition = turntable->getIndex();
-  //     char *positionName = nullptr;
-  //     uint16_t positionAngle = 0;
-  //     for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
-  //       if (index->getId() == currentPosition) {
-  //         positionName = index->getName();
-  //         positionAngle = index->getAngle();
-  //         break;
-  //       }
-  //     }
-  //     Coordinates stringPosition = _getTextPosition(positionName);
-  //     _display.drawString(positionName, stringPosition.x, stringPosition.y);
-  //     CONSOLE.print("Draw bridge position|name|angle|x|y: ");
-  //     CONSOLE.print(newPosition);
-  //     CONSOLE.print("|");
-  //     CONSOLE.print(positionName);
-  //     CONSOLE.print("|");
-  //     CONSOLE.print(positionAngle);
-  //     CONSOLE.print("|");
-  //     CONSOLE.print(stringPosition.x);
-  //     CONSOLE.print("|");
-  //     CONSOLE.println(stringPosition.y);
-  //   }
-  // }
+void TurntableDisplay::_drawPositionName(uint8_t position) {
+  Turntable *turntable = _csClient.turntables->getFirst();
+  if (turntable) {
+    // uint8_t currentPosition = turntable->getIndex();
+    // if (_bridgePosition != currentPosition) {
+      // _bridgePosition = currentPosition;
+      // uint8_t currentPosition = turntable->getIndex();
+      char *positionName = nullptr;
+      uint16_t positionAngle = 0;
+      for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
+        if (index->getId() == position) {
+          positionName = index->getName();
+          positionAngle = index->getAngle();
+          break;
+        }
+      }
+      Coordinates stringPosition = _getTextPosition(positionName);
+      _displaySprite.drawString(positionName, stringPosition.x, stringPosition.y);
+      CONSOLE.print("Draw bridge position|name|angle|x|y: ");
+      CONSOLE.print(position);
+      CONSOLE.print("|");
+      CONSOLE.print(positionName);
+      CONSOLE.print("|");
+      CONSOLE.print(positionAngle);
+      CONSOLE.print("|");
+      CONSOLE.print(stringPosition.x);
+      CONSOLE.print("|");
+      CONSOLE.println(stringPosition.y);
+    // }
+  }
 }
 
 void TurntableDisplay::_drawTurntable() {
