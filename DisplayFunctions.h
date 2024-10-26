@@ -18,6 +18,10 @@
 #ifndef DISPLAYFUNCTIONS_H
 #define DISPLAYFUNCTIONS_H
 
+#include "TurntableDisplay.h"
+
+extern TurntableDisplay turntableDisplay;
+
 /// @brief Set initial display state - show version then clear
 void setupDisplay();
 

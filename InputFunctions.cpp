@@ -15,7 +15,9 @@
  *  along with this code.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "CommandStationClient.h"
 #include "DeviceFunctions.h"
+#include "DisplayFunctions.h"
 #include "InputFunctions.h"
 #include "Rotary.h"
 #include "avdweb_Switch.h"
@@ -26,18 +28,38 @@ Switch encoderButton(ROTARY_BTN);
 void processInput() {
   encoderButton.poll();
   if (encoderButton.singleClick()) {
-    CONSOLE.println("Select position");
+    sendPositionChange();
   }
   if (encoderButton.doubleClick()) {
-    CONSOLE.println("Home");
+    sendHome();
   }
   if (encoderButton.longPress()) {
     resetDevice();
   }
   byte direction = encoder.process();
   if (direction == DIR_CW) {
-    CONSOLE.println("Clockwise");
+    turntableDisplay.setNextPosition();
+    CONSOLE.print("User set to position ");
+    CONSOLE.println(turntableDisplay.getPosition());
   } else if (direction == DIR_CCW) {
-    CONSOLE.println("Counter-clockwise");
+    turntableDisplay.setPreviousPosition();
+    CONSOLE.print("User set to position ");
+    CONSOLE.println(turntableDisplay.getPosition());
+  }
+}
+
+void sendPositionChange() {
+  Turntable *turntable = csClient.turntables->getFirst();
+  if (turntable) {
+    if (turntableDisplay.getPosition() != turntable->getIndex()) {
+      csClient.rotateTurntable(turntable->getId(), turntableDisplay.getPosition());
+    }
+  }
+}
+
+void sendHome() {
+  Turntable *turntable = csClient.turntables->getFirst();
+  if (turntable) {
+    csClient.rotateTurntable(turntable->getId(), 0, 2);
   }
 }

@@ -18,7 +18,6 @@
 #include "CommandStationClient.h"
 #include "Defines.h"
 #include "DisplayFunctions.h"
-#include "TurntableDisplay.h"
 #include "Version.h"
 #include <SPI.h>
 #include <TFT_eSPI.h>
@@ -60,9 +59,9 @@ void setupDisplay() {
   y += fontHeight;
   uint16_t versionTextWidth = display.textWidth("Version: ");
   uint16_t versionWidth = display.textWidth(VERSION);
-  display.drawString("Version: ", x - (versionWidth /2), y);
+  display.drawString("Version: ", x - (versionWidth / 2), y);
   display.setTextColor(DCCEX_EX, DCCEX_BACKGROUND);
-  display.drawString(VERSION, x - (versionTextWidth /2) + versionTextWidth, y);
+  display.drawString(VERSION, x - (versionTextWidth / 2) + versionTextWidth, y);
   y += fontHeight;
   display.setTextColor(DCCEX_DCC, DCCEX_BACKGROUND);
   display.drawString("Waiting...", x, y);

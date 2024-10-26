@@ -44,20 +44,35 @@ public:
   /// @brief Draws the initial turntable and bridge position, only to be called when lists have been received
   void begin();
 
-  /// @brief Update the display - call this at least once per main loop iteration
+  /// @brief Update the display - call this at least once per main loop iteration to respond to broadcasts and blink if
+  /// moving
   /// @param updateTime Current time in ms
   void update(unsigned long updateTime);
 
+  /// @brief Set the bridge to the next available position (clockwise), moves through home as position 0
+  void setNextPosition();
+
+  /// @brief Set the bridge to the previous available position (counter-clockwise), moves through home as position 0
+  void setPreviousPosition();
+
+  /// @brief Set the display's bridge position - call from a broadcast message to update the display
+  /// @param position Position index
+  void setPosition(uint8_t position);
+
+  /// @brief Get the current user selected position index
+  /// @return Position index
+  uint8_t getPosition();
+
 private:
-  TFT_eSprite &_displaySprite; // Reference to an existing TFT_eSprite object
-  DCCEXProtocol &_csClient;    // Pointer to an existing DCC-EX protocol turntable object
-  uint16_t _backgroundColour;  // 16 bit background colour
-  uint8_t _pitOffset;          // Number of pixels to inset pit wall from edge of display
-  uint16_t _pitColour;         // Colour of the pit wall
-  uint16_t _homeColour;        // Colour of the home position indicator
-  uint16_t _positionColour;    // Colour of position indicators
-  uint8_t _bridgePosition;     // Current position of the bridge, compare with broadcasts to prevent unnecessary redraws
-  uint16_t _bridgeColour;      // 16 bit colour of the bridge
+  TFT_eSprite &_displaySprite;            // Reference to an existing TFT_eSprite object
+  DCCEXProtocol &_csClient;               // Pointer to an existing DCC-EX protocol turntable object
+  uint16_t _backgroundColour;             // 16 bit background colour
+  uint8_t _pitOffset;                     // Number of pixels to inset pit wall from edge of display
+  uint16_t _pitColour;                    // Colour of the pit wall
+  uint16_t _homeColour;                   // Colour of the home position indicator
+  uint16_t _positionColour;               // Colour of position indicators
+  uint8_t _bridgePosition;                // Current position of the bridge as selected by the user
+  uint16_t _bridgeColour;                 // 16 bit colour of the bridge
   uint16_t _bridgePositionColour;         // 16 bit colour of the end of the bridge aligned with the position
   uint8_t _fontWidth;                     // Used to determine text positioning later
   uint8_t _fontHeight;                    // Used to determine text positioning later

@@ -37,4 +37,5 @@ void CSListener::receivedTurntableAction(int turntableId, int position, bool mov
   CONSOLE.print(position);
   CONSOLE.print("|");
   CONSOLE.println(moving);
+  turntableDisplay.setPosition(position);
 }

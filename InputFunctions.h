@@ -21,6 +21,13 @@
 #include "Defines.h"
 #include <Arduino.h>
 
+/// @brief Process all input methods
 void processInput();
+
+/// @brief Send a position change to the CommandStation on single click
+void sendPositionChange();
+
+/// @brief Send the home command to the CommandStation on double click
+void sendHome();
 
 #endif // INPUTFUNCTIONS_H
