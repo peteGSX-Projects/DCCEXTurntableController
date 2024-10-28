@@ -42,29 +42,33 @@ void TurntableDisplay::update(unsigned long updateTime) {}
 
 void TurntableDisplay::setNextPosition() {
   Turntable *turntable = _csClient.turntables->getFirst();
-  if (turntable) {
-    uint8_t maxPosition = turntable->getIndexCount() - 1;
-    if (_bridgePosition == maxPosition) {
-      _bridgePosition = 0;
-    } else if (_bridgePosition < maxPosition) {
-      _bridgePosition++;
-    } else {
-      _bridgePosition = 0;
-    }
+  if (!turntable) // No turntable object, don't try to do anything
+    return;
+  uint8_t maxPosition = turntable->getIndexCount() - 1;
+  if (maxPosition == 0) // If we only have home, don't try to do anything
+    return;
+  if (_bridgePosition == maxPosition) {
+    _bridgePosition = 1; // Cannot send home via this method, so skip it
+  } else if (_bridgePosition < maxPosition) {
+    _bridgePosition++; // Increment to the next position
+  } else {
+    _bridgePosition = 0;
   }
 }
 
 void TurntableDisplay::setPreviousPosition() {
   Turntable *turntable = _csClient.turntables->getFirst();
-  if (turntable) {
-    uint8_t maxPosition = turntable->getIndexCount() - 1;
-    if (_bridgePosition == 0) {
-      _bridgePosition = maxPosition;
-    } else if (_bridgePosition > 0) {
-      _bridgePosition--;
-    } else {
-      _bridgePosition = 0;
-    }
+  if (!turntable) // No turntable object, don't try to do anything
+    return;
+  uint8_t maxPosition = turntable->getIndexCount() - 1;
+  if (maxPosition == 0) // If we only have home, don't try to do anything
+    return;
+  if (_bridgePosition == 1) {
+    _bridgePosition = maxPosition; // Cannot send home via this method, so skip it
+  } else if (_bridgePosition > 0) {
+    _bridgePosition--; // Decrement to previous position
+  } else {
+    _bridgePosition = 0;
   }
 }
 
