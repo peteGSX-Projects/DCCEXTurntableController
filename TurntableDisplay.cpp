@@ -48,7 +48,7 @@ void TurntableDisplay::setNextPosition() {
   if (maxPosition == 0) // If we only have home, don't try to do anything
     return;
   if (_bridgePosition == maxPosition) {
-    _bridgePosition = 1; // Cannot send home via this method, so skip it
+    _bridgePosition = 0; // If at max, move to home next
   } else if (_bridgePosition < maxPosition) {
     _bridgePosition++; // Increment to the next position
   } else {
@@ -63,8 +63,8 @@ void TurntableDisplay::setPreviousPosition() {
   uint8_t maxPosition = turntable->getIndexCount() - 1;
   if (maxPosition == 0) // If we only have home, don't try to do anything
     return;
-  if (_bridgePosition == 1) {
-    _bridgePosition = maxPosition; // Cannot send home via this method, so skip it
+  if (_bridgePosition == 0) {
+    _bridgePosition = maxPosition; // If we're at home, max is next
   } else if (_bridgePosition > 0) {
     _bridgePosition--; // Decrement to previous position
   } else {

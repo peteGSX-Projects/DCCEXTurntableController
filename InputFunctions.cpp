@@ -55,7 +55,11 @@ void sendPositionChange() {
   Turntable *turntable = csClient.turntables->getFirst();
   if (turntable) {
     if (turntableDisplay.getPosition() != turntable->getIndex()) {
-      csClient.rotateTurntable(turntable->getId(), turntableDisplay.getPosition());
+      if (turntableDisplay.getPosition() == 0) {
+        sendHome(); // Homing needs the correct activity set, use this instead
+      } else {
+        csClient.rotateTurntable(turntable->getId(), turntableDisplay.getPosition());
+      }
     }
   }
 }
