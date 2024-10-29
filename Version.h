@@ -18,13 +18,15 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define VERSION "0.0.1"
+#define VERSION "0.0.2"
 
 /*
 0.0.1 includes:
   - Initial version
   - Request and control first defined turntable object from EX-CS
   - Basic control implemented without display elements
+0.0.2 includes:
+  - Display selected position name on screen
 */
 
 #endif  // VERSION_H

@@ -78,9 +78,10 @@ private:
   uint8_t _fontHeight;                    // Used to determine text positioning later
   static const unsigned long _blinkDelay; // Delay in ms for blinking when moving
   unsigned long _lastBlink;               // Last time in ms a blink occurred
+  bool _needsRedraw;                      // Flag if the display needs redrawing
 
   /// @brief Draw the currently selected position's name on screen
-  void _drawPositionName(uint8_t position);
+  void _drawPositionName();
 
   /// @brief Draws the basic turntable on screen
   void _drawTurntable();
