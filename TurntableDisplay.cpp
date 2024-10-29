@@ -24,10 +24,7 @@ TurntableDisplay::TurntableDisplay(TFT_eSprite &displaySprite, DCCEXProtocol &cs
     : _displaySprite(displaySprite), _csClient(csClient), _backgroundColour(backgroundColour), _pitOffset(pitOffset),
       _pitColour(pitColour), _homeColour(homeColour), _positionColour(positionColour), _bridgeColour(bridgeColour),
       _bridgePositionColour(bridgePositionColour) {
-  _bridgePosition = 0;                        // Start at home, will update once begin called
-  const GFXfont *gfxFont = TEXT_FONT;         // Set font from macro TEXT_FONT, no way to get it from the display object
-  _fontHeight = gfxFont->yAdvance;            // Get the font height
-  _fontWidth = _displaySprite.textWidth("A"); // Get the font width
+  _bridgePosition = 0; // Start at home, will update once begin called
   _needsRedraw = true;
 }
 
@@ -41,9 +38,12 @@ void TurntableDisplay::begin() {
 void TurntableDisplay::update(unsigned long updateTime) {
   if (!_needsRedraw)
     return;
+  Turntable *turntable = _csClient.turntables->getFirst();
+  if (!turntable)
+    return;
   _needsRedraw = false;
   _drawTurntable();
-  // _drawBridge();
+  _drawBridge();
   _drawPositionName();
   _displaySprite.pushSprite(0, 0);
 }
@@ -89,33 +89,6 @@ void TurntableDisplay::setPosition(uint8_t position) {
 
 uint8_t TurntableDisplay::getPosition() { return _bridgePosition; }
 
-void TurntableDisplay::_drawPositionName() {
-  Turntable *turntable = _csClient.turntables->getFirst();
-  if (!turntable)
-    return;
-  char *positionName = nullptr;
-  for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
-    if (index->getId() == _bridgePosition) {
-      positionName = index->getName();
-      break;
-    }
-  }
-  // Coordinates stringPosition = _getTextPosition(positionName);
-  // _displaySprite.drawString(positionName, stringPosition.x, stringPosition.y);
-  uint16_t x = _displaySprite.width() / 2;
-  uint16_t y = _displaySprite.height() / 2;
-  _displaySprite.setTextDatum(MC_DATUM);
-  _displaySprite.drawString(positionName, x, y);
-  CONSOLE.print("Draw bridge position|name|angle|x|y: ");
-  CONSOLE.print(_bridgePosition);
-  CONSOLE.print("|");
-  CONSOLE.print(positionName);
-  CONSOLE.print("|");
-  CONSOLE.print(x);
-  CONSOLE.print("|");
-  CONSOLE.println(y);
-}
-
 void TurntableDisplay::_drawTurntable() {
   _displaySprite.fillSprite(_backgroundColour);
   uint16_t x = _displaySprite.width() / 2;
@@ -132,13 +105,33 @@ void TurntableDisplay::_drawTurntable() {
   CONSOLE.print("|");
   CONSOLE.println(radius);
   _displaySprite.fillSmoothCircle(x, y, radius, _backgroundColour);
-  // _displaySprite.pushSprite(0, 0);
 }
 
-Coordinates TurntableDisplay::_getTextPosition(const char *text) {
-  Coordinates coordinates;
-  uint16_t textWidth = strlen(text) * _fontWidth;
-  coordinates.x = ((_displaySprite.width() / 2) - (textWidth / 2));
-  coordinates.y = (_displaySprite.height() / 2) - (_fontHeight / 2);
-  return coordinates;
+void TurntableDisplay::_drawBridge() {}
+
+void TurntableDisplay::_drawPositionName() {
+  Turntable *turntable = _csClient.turntables->getFirst();
+  if (!turntable)
+    return;
+  char *positionName = nullptr;
+  for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
+    if (index->getId() == _bridgePosition) {
+      positionName = index->getName();
+      break;
+    }
+  }
+  uint16_t x = _displaySprite.width() / 2;
+  uint16_t y = _displaySprite.height() / 2;
+  _displaySprite.setFreeFont(TEXT_FONT);
+  _displaySprite.setTextDatum(MC_DATUM);
+  _displaySprite.setTextColor(TEXT_COLOUR);
+  _displaySprite.drawString(positionName, x, y);
+  CONSOLE.print("Draw bridge position|name|angle|x|y: ");
+  CONSOLE.print(_bridgePosition);
+  CONSOLE.print("|");
+  CONSOLE.print(positionName);
+  CONSOLE.print("|");
+  CONSOLE.print(x);
+  CONSOLE.print("|");
+  CONSOLE.println(y);
 }

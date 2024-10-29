@@ -22,11 +22,11 @@
 #include <DCCEXProtocol.h>
 #include <TFT_eSPI.h>
 
-/// @brief Reusable struct to make returning coordinates from methods easier
-struct Coordinates {
-  uint16_t x;
-  uint16_t y;
-};
+// /// @brief Reusable struct to make returning coordinates from methods easier
+// struct Coordinates {
+//   uint16_t x;
+//   uint16_t y;
+// };
 
 class TurntableDisplay {
 public:
@@ -74,21 +74,19 @@ private:
   uint8_t _bridgePosition;                // Current position of the bridge as selected by the user
   uint16_t _bridgeColour;                 // 16 bit colour of the bridge
   uint16_t _bridgePositionColour;         // 16 bit colour of the end of the bridge aligned with the position
-  uint8_t _fontWidth;                     // Used to determine text positioning later
-  uint8_t _fontHeight;                    // Used to determine text positioning later
   static const unsigned long _blinkDelay; // Delay in ms for blinking when moving
   unsigned long _lastBlink;               // Last time in ms a blink occurred
   bool _needsRedraw;                      // Flag if the display needs redrawing
 
-  /// @brief Draw the currently selected position's name on screen
-  void _drawPositionName();
-
   /// @brief Draws the basic turntable on screen
   void _drawTurntable();
 
-  /// @brief Determines the X/Y coordinates to display the provided text in the centre of the display
-  /// @param text Char array of text to get coordinates for
-  Coordinates _getTextPosition(const char *text);
+  /// @brief Draw the currently selected bridge's position on screen
+  void _drawBridge();
+
+  /// @brief Draw the currently selected position's name on screen
+  void _drawPositionName();
+
 };
 
 #endif // TURNTABLEDISPLAY_H

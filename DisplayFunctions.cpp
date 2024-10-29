@@ -35,13 +35,14 @@ void setupDisplay() {
   digitalWrite(GC9A01_BL, HIGH);
 #endif
   const GFXfont *dccexFont = DCCEX_FONT;
-  const GFXfont *textFont = TEXT_FONT;
+  const GFXfont *dccexSmallFont = DCCEX_SMALL_FONT;
+  const GFXfont *dccexVersionFont = DCCEX_VERSION_FONT;
   display.setRotation(GC9A01_ROTATION);
   displaySprite.createSprite(display.width(), display.height());
   display.setFreeFont(dccexFont);
   display.fillScreen(DCCEX_BACKGROUND);
   uint8_t dccexFontHeight = dccexFont->yAdvance;
-  uint8_t fontHeight = textFont->yAdvance;
+  uint8_t fontHeight = dccexSmallFont->yAdvance;
   uint16_t x = display.width() / 2;
   uint16_t y = (display.height() / 2) - (dccexFontHeight + (fontHeight * 3) / 2);
   display.setTextDatum(MC_DATUM);
@@ -53,17 +54,21 @@ void setupDisplay() {
   display.setTextColor(DCCEX_EX, DCCEX_BACKGROUND);
   display.drawString("EX", x - (dccWidth / 2) + dccWidth, y);
   y += (fontHeight * 2);
-  display.setFreeFont(textFont);
+  display.setFreeFont(dccexSmallFont);
   display.setTextColor(DCCEX_DCC, DCCEX_BACKGROUND);
   display.drawString("Turntable Controller", x, y);
   y += fontHeight;
   uint16_t versionTextWidth = display.textWidth("Version: ");
+  display.setFreeFont(dccexVersionFont);
   uint16_t versionWidth = display.textWidth(VERSION);
+  display.setFreeFont(dccexSmallFont);
   display.drawString("Version: ", x - (versionWidth / 2), y);
   display.setTextColor(DCCEX_EX, DCCEX_BACKGROUND);
+  display.setFreeFont(dccexVersionFont);
   display.drawString(VERSION, x - (versionTextWidth / 2) + versionTextWidth, y);
   y += fontHeight;
   display.setTextColor(DCCEX_DCC, DCCEX_BACKGROUND);
+  display.setFreeFont(dccexSmallFont);
   display.drawString("Waiting...", x, y);
 }
 

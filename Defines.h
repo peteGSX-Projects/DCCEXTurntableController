@@ -98,7 +98,7 @@ If not defined in myConfig.h, define default colours here
 If not defined in myConfig.h, define the text font here
 */
 #ifndef TEXT_FONT
-#define TEXT_FONT &FreeMono9pt7b
+#define TEXT_FONT &FreeSansBold12pt7b
 #endif // TEXT_FONT
 
 /*
@@ -115,5 +115,7 @@ Colour definitions and font for the DCC-EX logo
 #define DCCEX_EX 0x03B6
 #define DCCEX_BACKGROUND 0xFFFF
 #define DCCEX_FONT &FreeSansBold12pt7b
+#define DCCEX_SMALL_FONT &FreeMono9pt7b
+#define DCCEX_VERSION_FONT &FreeMonoBold9pt7b
 
 #endif // DEFINES_H
