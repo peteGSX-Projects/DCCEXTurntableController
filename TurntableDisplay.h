@@ -36,18 +36,19 @@ public:
   /// @param textColour 16 bit colour for the text
   /// @param backgroundColour 16 bit colour for the background
   /// @param bridgeColour 16 bit colour for the turntable bridge
+  /// @param bridgeMovingColour 16 bit colour for the bridge when moving, or when user is selecting a new position
   /// @param bridgePositionColour 16 bit colour for the end of the bridge indicating the selected position
+  /// @param blinkDelay Delay in ms to blink position text and bridge when turntable is moving
   TurntableDisplay(TFT_eSprite &displaySprite, DCCEXProtocol &csClient, uint16_t backgroundColour, uint8_t pitOffset,
                    uint16_t pitColour, uint16_t homeColour, uint16_t positionColour, uint16_t bridgeColour,
-                   uint16_t bridgePositionColour);
+                   uint16_t bridgeMovingColour, uint16_t bridgePositionColour, unsigned long blinkDelay);
 
   /// @brief Draws the initial turntable and bridge position, only to be called when lists have been received
   void begin();
 
   /// @brief Update the display - call this at least once per main loop iteration to respond to broadcasts and blink if
   /// moving
-  /// @param updateTime Current time in ms
-  void update(unsigned long updateTime);
+  void update();
 
   /// @brief Set the bridge to the next available position (clockwise), moves through home as position 0
   void setNextPosition();
@@ -57,26 +58,31 @@ public:
 
   /// @brief Set the display's bridge position - call from a broadcast message to update the display
   /// @param position Position index
-  void setPosition(uint8_t position);
+  /// @param moving Flag if the turntable is moving
+  void setPosition(uint8_t position, bool moving);
 
   /// @brief Get the current user selected position index
   /// @return Position index
   uint8_t getPosition();
 
 private:
-  TFT_eSprite &_displaySprite;            // Reference to an existing TFT_eSprite object
-  DCCEXProtocol &_csClient;               // Pointer to an existing DCC-EX protocol turntable object
-  uint16_t _backgroundColour;             // 16 bit background colour
-  uint8_t _pitOffset;                     // Number of pixels to inset pit wall from edge of display
-  uint16_t _pitColour;                    // Colour of the pit wall
-  uint16_t _homeColour;                   // Colour of the home position indicator
-  uint16_t _positionColour;               // Colour of position indicators
-  uint8_t _bridgePosition;                // Current position of the bridge as selected by the user
-  uint16_t _bridgeColour;                 // 16 bit colour of the bridge
-  uint16_t _bridgePositionColour;         // 16 bit colour of the end of the bridge aligned with the position
-  static const unsigned long _blinkDelay; // Delay in ms for blinking when moving
-  unsigned long _lastBlink;               // Last time in ms a blink occurred
-  bool _needsRedraw;                      // Flag if the display needs redrawing
+  TFT_eSprite &_displaySprite;    // Reference to an existing TFT_eSprite object
+  DCCEXProtocol &_csClient;       // Pointer to an existing DCC-EX protocol turntable object
+  uint16_t _backgroundColour;     // 16 bit background colour
+  uint8_t _pitOffset;             // Number of pixels to inset pit wall from edge of display
+  uint16_t _pitColour;            // Colour of the pit wall
+  uint16_t _homeColour;           // Colour of the home position indicator
+  uint16_t _positionColour;       // Colour of position indicators
+  uint8_t _bridgePosition;        // Current position of the bridge as selected by the user
+  uint16_t _bridgeColour;         // 16 bit colour of the bridge
+  uint16_t _bridgeMovingColour;   // 16 bit colour of the bridge when moving or when not aligned with turntable object
+  uint16_t _bridgePositionColour; // 16 bit colour of the end of the bridge aligned with the position
+  uint16_t _positionTextColour;   // Colour of the text for each position
+  unsigned long _blinkDelay;      // Delay in ms for blinking when moving
+  unsigned long _lastBlinkTime;   // Time of the last blink in ms
+  bool _blinkState;               // Flag to manage if the current state for blinking is on or off
+  bool _needsRedraw;              // Flag if the display needs redrawing
+  bool _isMoving;                 // Flag if the turntable object is moving
 
   /// @brief Draws the basic turntable on screen
   void _drawTurntable();
@@ -86,7 +92,6 @@ private:
 
   /// @brief Draw the currently selected position's name on screen
   void _drawPositionName();
-
 };
 
 #endif // TURNTABLEDISPLAY_H

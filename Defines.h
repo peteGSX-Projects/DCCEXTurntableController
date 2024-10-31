@@ -57,6 +57,7 @@ If not defined in myConfig.h, define the rotary encoder pins and options here
 
 /*
 If not defined in myConfig.h, define the GC9A01 display pins here
+Note only backlight is defined here, the rest should be in the TFT_eSPI config
 */
 #ifndef GC9A01_BL
 #define GC9A01_BL PA1
@@ -81,6 +82,9 @@ If not defined in myConfig.h, define default colours here
 #ifndef BRIDGE_COLOUR
 #define BRIDGE_COLOUR TFT_RED
 #endif // BRIDGE_COLOUR
+#ifndef BRIDGE_MOVING_COLOUR
+#define BRIDGE_MOVING_COLOUR TFT_DARKCYAN
+#endif // BRIDGE_MOVING COLOUR
 #ifndef PIT_COLOUR
 #define PIT_COLOUR TFT_BLUE
 #endif // PIT_COLOUR
@@ -93,6 +97,13 @@ If not defined in myConfig.h, define default colours here
 #ifndef POSITION_COLOUR
 #define POSITION_COLOUR TFT_MAGENTA
 #endif // POSITION_COLOUR
+
+/*
+If not defined in myConfig.h, define the blink delay here (in ms)
+*/
+#ifndef BLINK_DELAY
+#define BLINK_DELAY 500
+#endif // BLINK_DELAY
 
 /*
 If not defined in myConfig.h, define the text font here
