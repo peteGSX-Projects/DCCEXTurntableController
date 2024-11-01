@@ -76,9 +76,9 @@ If not defined in myConfig.h, define default colours here
 #ifndef BACKGROUND_COLOUR
 #define BACKGROUND_COLOUR TFT_BLACK
 #endif // BACKGROUND_COLOUR
-#ifndef TEXT_COLOUR
-#define TEXT_COLOUR TFT_GREENYELLOW
-#endif // TEXT_COLOUR
+#ifndef POSITION_TEXT_COLOUR
+#define POSITION_TEXT_COLOUR TFT_GREENYELLOW
+#endif // POSITION_TEXT_COLOUR
 #ifndef BRIDGE_COLOUR
 #define BRIDGE_COLOUR TFT_RED
 #endif // BRIDGE_COLOUR

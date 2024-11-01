@@ -27,6 +27,7 @@
   - Basic control implemented without display elements
 0.0.2 includes:
   - Display selected position name on screen
+  - Blink position name when turntable moving
 */
 
 #endif  // VERSION_H

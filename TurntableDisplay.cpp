@@ -21,10 +21,11 @@
 TurntableDisplay::TurntableDisplay(TFT_eSprite &displaySprite, DCCEXProtocol &csClient, uint16_t backgroundColour,
                                    uint8_t pitOffset, uint16_t pitColour, uint16_t homeColour, uint16_t positionColour,
                                    uint16_t bridgeColour, uint16_t bridgeMovingColour, uint16_t bridgePositionColour,
-                                   unsigned long blinkDelay)
+                                   uint16_t positionTextColour, unsigned long blinkDelay)
     : _displaySprite(displaySprite), _csClient(csClient), _backgroundColour(backgroundColour), _pitOffset(pitOffset),
       _pitColour(pitColour), _homeColour(homeColour), _positionColour(positionColour), _bridgeColour(bridgeColour),
-      _bridgeMovingColour(bridgeMovingColour), _bridgePositionColour(bridgePositionColour), _blinkDelay(blinkDelay) {
+      _bridgeMovingColour(bridgeMovingColour), _bridgePositionColour(bridgePositionColour),
+      _positionTextColour(positionTextColour), _blinkDelay(blinkDelay) {
   _bridgePosition = 0; // Start at home, will update once begin called
   _lastBlinkTime = 0;  // Default time to 0
   _blinkState = true;  // Default to bridge and text being displayed
@@ -43,13 +44,13 @@ void TurntableDisplay::update() {
   if (!_needsRedraw && !_isMoving) // Don't need to update if it doesn't need it, and it's not moving
     return;
   Turntable *turntable = _csClient.turntables->getFirst();
-  if (!turntable)
+  if (!turntable) // If we don't have a turntable object, can't do anything
     return;
   unsigned long currentTime = millis();
-  if (_isMoving && (currentTime - _lastBlinkTime > _blinkDelay)) {
+  if (_isMoving && (currentTime - _lastBlinkTime > _blinkDelay)) { // Blink at the defined rate
     _lastBlinkTime = currentTime;
     _blinkState = !_blinkState;
-  } else if (!_isMoving) {
+  } else if (!_isMoving) { // Ensure when a movement has finished that we set state to be on
     _needsRedraw = false;
     _blinkState = true;
   } else {

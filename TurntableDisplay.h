@@ -38,10 +38,12 @@ public:
   /// @param bridgeColour 16 bit colour for the turntable bridge
   /// @param bridgeMovingColour 16 bit colour for the bridge when moving, or when user is selecting a new position
   /// @param bridgePositionColour 16 bit colour for the end of the bridge indicating the selected position
+  /// @param positionTextColour 16 bit colour for the name of the selected position
   /// @param blinkDelay Delay in ms to blink position text and bridge when turntable is moving
   TurntableDisplay(TFT_eSprite &displaySprite, DCCEXProtocol &csClient, uint16_t backgroundColour, uint8_t pitOffset,
                    uint16_t pitColour, uint16_t homeColour, uint16_t positionColour, uint16_t bridgeColour,
-                   uint16_t bridgeMovingColour, uint16_t bridgePositionColour, unsigned long blinkDelay);
+                   uint16_t bridgeMovingColour, uint16_t bridgePositionColour, uint16_t positionTextColour,
+                   unsigned long blinkDelay);
 
   /// @brief Draws the initial turntable and bridge position, only to be called when lists have been received
   void begin();
