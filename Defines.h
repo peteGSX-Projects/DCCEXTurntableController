@@ -120,7 +120,7 @@ If not defined in myConfig.h, define turntable display parameters here
 #endif // PIT_OFFSET
 
 /*
-Colour definitions and font for the DCC-EX logo
+Colour definitions and fonts for the DCC-EX logo
 */
 #define DCCEX_DCC 0x01C8
 #define DCCEX_EX 0x03B6
