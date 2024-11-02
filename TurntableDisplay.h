@@ -101,12 +101,12 @@ private:
 
   /// @brief Get coordinates of end of a line, pivot at x,y, length r, angle a, *Taken from TFT_eSPI anti aliased clock
   /// demo*
-  /// @param x
-  /// @param y
-  /// @param xp
-  /// @param yp
-  /// @param r
-  /// @param a
+  /// @param x Starting X point to calculate coordinates from
+  /// @param y Starting Y point to calculate coordinates from
+  /// @param xp Reference to the resultant X point variable
+  /// @param yp Reference to the resultant Y point variable
+  /// @param r Length of the desired object to be drawn (typically a line)
+  /// @param a Angle it is to be drawn at
   void _getCoordinates(uint16_t x, uint16_t y, float *xp, float *yp, uint16_t r, float a);
 };
 

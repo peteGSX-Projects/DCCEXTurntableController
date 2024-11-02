@@ -116,28 +116,32 @@ void TurntableDisplay::setPosition(uint8_t position, bool moving) {
 uint8_t TurntableDisplay::getPosition() { return _bridgePosition; }
 
 void TurntableDisplay::_drawTurntable(Turntable *turntable) {
-  _displaySprite.fillSprite(_backgroundColour);
-  uint16_t x = _displaySprite.width() / 2;
+  _displaySprite.fillSprite(_backgroundColour); // Clear screen
+  uint16_t x = _displaySprite.width() / 2;      // Get X/Y for centre of screen for circle and positions
   uint16_t y = _displaySprite.height() / 2;
-  uint16_t radius = min(x, y) - _pitOffset;
-  CONSOLE.print("Draw pit x|y|outer radius|inner radius: ");
-  CONSOLE.print(x);
-  CONSOLE.print("|");
-  CONSOLE.print(y);
-  CONSOLE.print("|");
-  CONSOLE.print(radius);
+  uint16_t radius = min(x, y) - _pitOffset; // Radius of the pit wall subtracts _pitOffset
+  float positionX = 0;
+  float positionY = 0;
+  for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
+    float angle = index->getAngle() / 10;
+    _getCoordinates(x, y, &positionX, &positionY, radius + (_pitOffset / 2),
+                    angle); // Calculate coordinates to plot each position indicator, draw these before the pit wall so
+                            // it clears the centre
+    if (index->getId() == 0) {
+      _displaySprite.drawWideLine(x, y, positionX, positionY, 6.0f, _homeColour);
+    } else {
+      _displaySprite.drawWideLine(x, y, positionX, positionY, 6.0f, _positionColour);
+    }
+  }
   _displaySprite.fillSmoothCircle(x, y, radius, _pitColour, _backgroundColour);
-  radius -= 3;
-  CONSOLE.print("|");
-  CONSOLE.println(radius);
-  _displaySprite.fillSmoothCircle(x, y, radius, _backgroundColour);
+  _displaySprite.fillSmoothCircle(x, y, radius - 3, _backgroundColour);
 }
 
 void TurntableDisplay::_drawBridge(Turntable *turntable) {
   float angle = 0;
   for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
     if (index->getId() == _bridgePosition) {
-      angle = index->getAngle();
+      angle = index->getAngle() / 10;
       break;
     }
   }
@@ -170,12 +174,6 @@ void TurntableDisplay::_drawBridge(Turntable *turntable) {
   _getCoordinates(_displaySprite.width() / 2, _displaySprite.height() / 2, &x, &y, halfBridgeLength,
                   angle); // Get coordinates for other end starting from display centre
   _displaySprite.drawWideLine(_displaySprite.width() / 2, _displaySprite.height() / 2, x, y, 6.0f, bridgeColour);
-  CONSOLE.print("Draw bridge line at x|y|angle: ");
-  CONSOLE.print(x);
-  CONSOLE.print("|");
-  CONSOLE.print(y);
-  CONSOLE.print("|");
-  CONSOLE.println(angle);
 }
 
 void TurntableDisplay::_drawPositionName(Turntable *turntable) {
@@ -196,12 +194,6 @@ void TurntableDisplay::_drawPositionName(Turntable *turntable) {
     _displaySprite.setTextColor(_backgroundColour);
   }
   _displaySprite.drawString(positionName, x, y);
-  CONSOLE.print("Draw position|_blinkState|name: ");
-  CONSOLE.print(_bridgePosition);
-  CONSOLE.print("|");
-  CONSOLE.print(_blinkState);
-  CONSOLE.print("|");
-  CONSOLE.println(positionName);
 }
 
 // =========================================================================

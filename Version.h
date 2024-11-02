@@ -18,9 +18,12 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define VERSION "0.0.3"
+#define VERSION "0.0.4"
 
 /*
+0.0.4 includes:
+  - Display home and position indicators on screen around the pit wall
+  - Fix angles to divide by 10 as per DCC-EX configuration
 0.0.3 includes:
   - Display turntable bridge on screen with home end indicator
   - Blink bridge with position name when turntable moving
