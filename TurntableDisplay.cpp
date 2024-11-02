@@ -36,6 +36,9 @@ TurntableDisplay::TurntableDisplay(TFT_eSprite &displaySprite, DCCEXProtocol &cs
 void TurntableDisplay::begin() {
   Turntable *turntable = _csClient.turntables->getFirst();
   if (turntable) {
+    setPosition(
+        turntable->getIndex(),
+        false); // Set initial position, note bug with isMoving() means it's always true, so override it manually
     update();
   }
 }
@@ -56,13 +59,15 @@ void TurntableDisplay::update() {
   } else {
     _needsRedraw = false;
   }
-  _drawTurntable();
-  _drawBridge();
-  _drawPositionName();
+  _drawTurntable(turntable);
+  _drawBridge(turntable);
+  _drawPositionName(turntable);
   _displaySprite.pushSprite(0, 0);
 }
 
 void TurntableDisplay::setNextPosition() {
+  if (_isMoving) // If moving, don't allow other changes
+    return;
   Turntable *turntable = _csClient.turntables->getFirst();
   if (!turntable) // No turntable object, don't try to do anything
     return;
@@ -80,6 +85,8 @@ void TurntableDisplay::setNextPosition() {
 }
 
 void TurntableDisplay::setPreviousPosition() {
+  if (_isMoving) // If moving, don't allow other changes
+    return;
   Turntable *turntable = _csClient.turntables->getFirst();
   if (!turntable) // No turntable object, don't try to do anything
     return;
@@ -108,7 +115,7 @@ void TurntableDisplay::setPosition(uint8_t position, bool moving) {
 
 uint8_t TurntableDisplay::getPosition() { return _bridgePosition; }
 
-void TurntableDisplay::_drawTurntable() {
+void TurntableDisplay::_drawTurntable(Turntable *turntable) {
   _displaySprite.fillSprite(_backgroundColour);
   uint16_t x = _displaySprite.width() / 2;
   uint16_t y = _displaySprite.height() / 2;
@@ -126,12 +133,52 @@ void TurntableDisplay::_drawTurntable() {
   _displaySprite.fillSmoothCircle(x, y, radius, _backgroundColour);
 }
 
-void TurntableDisplay::_drawBridge() {}
+void TurntableDisplay::_drawBridge(Turntable *turntable) {
+  float angle = 0;
+  for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
+    if (index->getId() == _bridgePosition) {
+      angle = index->getAngle();
+      break;
+    }
+  }
+  float x = 0;
+  float y = 0;
+  uint16_t bridgeColour;
+  uint16_t bridgeHomeEndColour;
+  if (_blinkState) {
+    if (_isMoving || (_bridgePosition != turntable->getIndex())) {
+      bridgeColour = _bridgeMovingColour;
+    } else {
+      bridgeColour = _bridgeColour;
+    }
+    bridgeHomeEndColour = _bridgePositionColour;
+  } else {
+    bridgeColour = _backgroundColour;
+    bridgeHomeEndColour = _backgroundColour;
+  }
+  uint16_t halfBridgeLength = (min(_displaySprite.width(), _displaySprite.height()) / 2) - _pitOffset - 10;
+  uint16_t homeHalfBridgeLength = halfBridgeLength - 15;
+  _getCoordinates(_displaySprite.width() / 2, _displaySprite.height() / 2, &x, &y, homeHalfBridgeLength,
+                  angle); // Get coordinates for home end of bridge starting from display centre
+  _displaySprite.drawWideLine(_displaySprite.width() / 2, _displaySprite.height() / 2, x, y, 6.0f, bridgeColour);
+  uint16_t homeX = x;
+  uint16_t homeY = y;
+  _getCoordinates(homeX, homeY, &x, &y, 15,
+                  angle); // Get coordinates for the home end indicator starting from home end of the bridge
+  _displaySprite.drawWideLine(homeX, homeY, x, y, 6.0f, bridgeHomeEndColour);
+  angle += 180; // Add 180 degrees for other end of bridge
+  _getCoordinates(_displaySprite.width() / 2, _displaySprite.height() / 2, &x, &y, halfBridgeLength,
+                  angle); // Get coordinates for other end starting from display centre
+  _displaySprite.drawWideLine(_displaySprite.width() / 2, _displaySprite.height() / 2, x, y, 6.0f, bridgeColour);
+  CONSOLE.print("Draw bridge line at x|y|angle: ");
+  CONSOLE.print(x);
+  CONSOLE.print("|");
+  CONSOLE.print(y);
+  CONSOLE.print("|");
+  CONSOLE.println(angle);
+}
 
-void TurntableDisplay::_drawPositionName() {
-  Turntable *turntable = _csClient.turntables->getFirst();
-  if (!turntable)
-    return;
+void TurntableDisplay::_drawPositionName(Turntable *turntable) {
   char *positionName = nullptr;
   for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
     if (index->getId() == _bridgePosition) {
@@ -155,4 +202,16 @@ void TurntableDisplay::_drawPositionName() {
   CONSOLE.print(_blinkState);
   CONSOLE.print("|");
   CONSOLE.println(positionName);
+}
+
+// =========================================================================
+// Get coordinates of end of a line, pivot at x,y, length r, angle a
+// Taken from TFT_eSPI Anti-aliased_Clock demo
+// =========================================================================
+// Coordinates are returned to caller via the xp and yp pointers
+void TurntableDisplay::_getCoordinates(uint16_t x, uint16_t y, float *xp, float *yp, uint16_t r, float a) {
+  float sx1 = cos((a - 90) * _degreesToRadians);
+  float sy1 = sin((a - 90) * _degreesToRadians);
+  *xp = sx1 * r + x;
+  *yp = sy1 * r + y;
 }

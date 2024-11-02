@@ -18,16 +18,19 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define VERSION "0.0.2"
+#define VERSION "0.0.3"
 
 /*
+0.0.3 includes:
+  - Display turntable bridge on screen with home end indicator
+  - Blink bridge with position name when turntable moving
+0.0.2 includes:
+  - Display selected position name on screen
+  - Blink position name when turntable moving
 0.0.1 includes:
   - Initial version
   - Request and control first defined turntable object from EX-CS
   - Basic control implemented without display elements
-0.0.2 includes:
-  - Display selected position name on screen
-  - Blink position name when turntable moving
 */
 
-#endif  // VERSION_H
+#endif // VERSION_H

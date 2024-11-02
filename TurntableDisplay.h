@@ -85,15 +85,29 @@ private:
   bool _blinkState;               // Flag to manage if the current state for blinking is on or off
   bool _needsRedraw;              // Flag if the display needs redrawing
   bool _isMoving;                 // Flag if the turntable object is moving
+  const float _degreesToRadians = 0.0174532925; // Degrees to radians
 
   /// @brief Draws the basic turntable on screen
-  void _drawTurntable();
+  /// @param turntable Pointer to a DCC-EX protocol Turntable object
+  void _drawTurntable(Turntable *turntable);
 
   /// @brief Draw the currently selected bridge's position on screen
-  void _drawBridge();
+  /// @param turntable Pointer to a DCC-EX protocol Turntable object
+  void _drawBridge(Turntable *turntable);
 
   /// @brief Draw the currently selected position's name on screen
-  void _drawPositionName();
+  /// @param turntable Pointer to a DCC-EX protocol Turntable object
+  void _drawPositionName(Turntable *turntable);
+
+  /// @brief Get coordinates of end of a line, pivot at x,y, length r, angle a, *Taken from TFT_eSPI anti aliased clock
+  /// demo*
+  /// @param x
+  /// @param y
+  /// @param xp
+  /// @param yp
+  /// @param r
+  /// @param a
+  void _getCoordinates(uint16_t x, uint16_t y, float *xp, float *yp, uint16_t r, float a);
 };
 
 #endif // TURNTABLEDISPLAY_H
