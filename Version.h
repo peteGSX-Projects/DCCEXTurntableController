@@ -18,9 +18,12 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define VERSION "0.0.4"
+#define VERSION "0.0.5"
 
 /*
+0.0.5 includes:
+  - Update DCCEXProtocol dependency to 0.0.17 for isMoving() bugfix
+  - Add heartbeat to prevent client disconnects (preparation for WiFi)
 0.0.4 includes:
   - Display home and position indicators on screen around the pit wall
   - Fix angles to divide by 10 as per DCC-EX configuration

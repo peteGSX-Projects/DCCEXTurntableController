@@ -22,11 +22,5 @@
 void CSListener::receivedTurntableList() { createTurntableDisplay(); }
 
 void CSListener::receivedTurntableAction(int turntableId, int position, bool moving) {
-  CONSOLE.print("Turntable action ID|position|moving: ");
-  CONSOLE.print(turntableId);
-  CONSOLE.print("|");
-  CONSOLE.print(position);
-  CONSOLE.print("|");
-  CONSOLE.println(moving);
-  turntableDisplay.setPosition(position, moving);
+  turntableDisplay.setPosition(position);
 }

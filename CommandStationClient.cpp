@@ -29,6 +29,7 @@ CSListener csListener;
 void setupCSClient(Stream &consoleStream, Stream &csConnectionStream) {
   csClient.setLogStream(&consoleStream);
   csClient.setDelegate(&csListener);
+  csClient.enableHeartbeat();
   csClient.connect(&csConnectionStream);
 }
 
