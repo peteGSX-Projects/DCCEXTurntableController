@@ -22,12 +22,6 @@
 #include <DCCEXProtocol.h>
 #include <TFT_eSPI.h>
 
-// /// @brief Reusable struct to make returning coordinates from methods easier
-// struct Coordinates {
-//   uint16_t x;
-//   uint16_t y;
-// };
-
 class TurntableDisplay {
 public:
   /// @brief Constructor for the TurntableDisplay object, results in the basic turntable drawn on screen
@@ -60,8 +54,7 @@ public:
 
   /// @brief Set the display's bridge position - call from a broadcast message to update the display
   /// @param position Position index
-  /// @param moving Flag if the turntable is moving
-  void setPosition(uint8_t position, bool moving);
+  void setPosition(uint8_t position);
 
   /// @brief Get the current user selected position index
   /// @return Position index
@@ -84,7 +77,6 @@ private:
   unsigned long _lastBlinkTime;   // Time of the last blink in ms
   bool _blinkState;               // Flag to manage if the current state for blinking is on or off
   bool _needsRedraw;              // Flag if the display needs redrawing
-  bool _isMoving;                 // Flag if the turntable object is moving
   const float _degreesToRadians = 0.0174532925; // Degrees to radians
 
   /// @brief Draws the basic turntable on screen

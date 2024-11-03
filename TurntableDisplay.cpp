@@ -30,34 +30,30 @@ TurntableDisplay::TurntableDisplay(TFT_eSprite &displaySprite, DCCEXProtocol &cs
   _lastBlinkTime = 0;  // Default time to 0
   _blinkState = true;  // Default to bridge and text being displayed
   _needsRedraw = true; // Default to needing to draw the display
-  _isMoving = false;   // Default to not moving
 }
 
 void TurntableDisplay::begin() {
   Turntable *turntable = _csClient.turntables->getFirst();
   if (turntable) {
-    setPosition(
-        turntable->getIndex(),
-        false); // Set initial position, note bug with isMoving() means it's always true, so override it manually
+    setPosition(turntable->getIndex()); // Set initial position
     update();
   }
 }
 
 void TurntableDisplay::update() {
-  if (!_needsRedraw && !_isMoving) // Don't need to update if it doesn't need it, and it's not moving
+  if (!_needsRedraw) // Don't need to update if it doesn't need it, and it's not moving
     return;
   Turntable *turntable = _csClient.turntables->getFirst();
   if (!turntable) // If we don't have a turntable object, can't do anything
     return;
+  bool isMoving = turntable->isMoving();
   unsigned long currentTime = millis();
-  if (_isMoving && (currentTime - _lastBlinkTime > _blinkDelay)) { // Blink at the defined rate
+  if (isMoving && (currentTime - _lastBlinkTime > _blinkDelay)) { // Blink at the defined rate
     _lastBlinkTime = currentTime;
     _blinkState = !_blinkState;
-  } else if (!_isMoving) { // Ensure when a movement has finished that we set state to be on
+  } else if (!isMoving) { // Ensure when a movement has finished that we set state to be on
     _needsRedraw = false;
     _blinkState = true;
-  } else {
-    _needsRedraw = false;
   }
   _drawTurntable(turntable);
   _drawBridge(turntable);
@@ -66,10 +62,10 @@ void TurntableDisplay::update() {
 }
 
 void TurntableDisplay::setNextPosition() {
-  if (_isMoving) // If moving, don't allow other changes
-    return;
   Turntable *turntable = _csClient.turntables->getFirst();
   if (!turntable) // No turntable object, don't try to do anything
+    return;
+  if (turntable->isMoving()) // If moving, don't allow other changes
     return;
   uint8_t maxPosition = turntable->getIndexCount() - 1;
   if (maxPosition == 0) // If we only have home, don't try to do anything
@@ -85,10 +81,10 @@ void TurntableDisplay::setNextPosition() {
 }
 
 void TurntableDisplay::setPreviousPosition() {
-  if (_isMoving) // If moving, don't allow other changes
-    return;
   Turntable *turntable = _csClient.turntables->getFirst();
   if (!turntable) // No turntable object, don't try to do anything
+    return;
+  if (turntable->isMoving()) // If moving, don't allow other changes
     return;
   uint8_t maxPosition = turntable->getIndexCount() - 1;
   if (maxPosition == 0) // If we only have home, don't try to do anything
@@ -103,12 +99,10 @@ void TurntableDisplay::setPreviousPosition() {
   _needsRedraw = true;
 }
 
-void TurntableDisplay::setPosition(uint8_t position, bool moving) {
+void TurntableDisplay::setPosition(uint8_t position) {
   Turntable *turntable = _csClient.turntables->getFirst();
   if (!turntable)
     return;
-  _isMoving = moving;
-  // _isMoving = turntable->isMoving(); CANNOT USE THIS METHOD - suspected bug in protocol library
   _bridgePosition = position;
   _needsRedraw = true;
 }
@@ -139,6 +133,7 @@ void TurntableDisplay::_drawTurntable(Turntable *turntable) {
 
 void TurntableDisplay::_drawBridge(Turntable *turntable) {
   float angle = 0;
+  bool isMoving = turntable->isMoving();
   for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
     if (index->getId() == _bridgePosition) {
       angle = index->getAngle() / 10;
@@ -150,7 +145,7 @@ void TurntableDisplay::_drawBridge(Turntable *turntable) {
   uint16_t bridgeColour;
   uint16_t bridgeHomeEndColour;
   if (_blinkState) {
-    if (_isMoving || (_bridgePosition != turntable->getIndex())) {
+    if (isMoving || (_bridgePosition != turntable->getIndex())) {
       bridgeColour = _bridgeMovingColour;
     } else {
       bridgeColour = _bridgeColour;
