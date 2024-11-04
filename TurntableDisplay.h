@@ -78,6 +78,7 @@ private:
   bool _blinkState;               // Flag to manage if the current state for blinking is on or off
   bool _needsRedraw;              // Flag if the display needs redrawing
   const float _degreesToRadians = 0.0174532925; // Degrees to radians
+  float _homeAngle;                             // Store the angle of the home position, all others are relative to this
 
   /// @brief Draws the basic turntable on screen
   /// @param turntable Pointer to a DCC-EX protocol Turntable object
@@ -100,6 +101,11 @@ private:
   /// @param r Length of the desired object to be drawn (typically a line)
   /// @param a Angle it is to be drawn at
   void _getCoordinates(uint16_t x, uint16_t y, float *xp, float *yp, uint16_t r, float a);
+
+  /// @brief Calculate the correct angle to draw a line on screen relative to the home position
+  /// @param relativeAngle Relative angle of the position to be drawn
+  /// @return The absolute angle to draw the line on screen
+  float _calculateAngle(float relativeAngle);
 };
 
 #endif // TURNTABLEDISPLAY_H

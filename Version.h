@@ -18,9 +18,11 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define VERSION "0.0.5"
+#define VERSION "0.0.6"
 
 /*
+0.0.6 includes:
+  - Correct logic to calculate position angles from home
 0.0.5 includes:
   - Update DCCEXProtocol dependency to 0.0.17 for isMoving() bugfix
   - Add heartbeat to prevent client disconnects (preparation for WiFi)

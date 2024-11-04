@@ -30,6 +30,7 @@ TurntableDisplay::TurntableDisplay(TFT_eSprite &displaySprite, DCCEXProtocol &cs
   _lastBlinkTime = 0;  // Default time to 0
   _blinkState = true;  // Default to bridge and text being displayed
   _needsRedraw = true; // Default to needing to draw the display
+  _homeAngle = 0;      // Default to home at 0 degrees
 }
 
 void TurntableDisplay::begin() {
@@ -116,8 +117,14 @@ void TurntableDisplay::_drawTurntable(Turntable *turntable) {
   uint16_t radius = min(x, y) - _pitOffset; // Radius of the pit wall subtracts _pitOffset
   float positionX = 0;
   float positionY = 0;
+  float angle = 0;
   for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
-    float angle = index->getAngle() / 10;
+    if (index->getId() == 0) { // First index will always be home, so safe to get its angle here
+      _homeAngle = index->getAngle() / 10;
+      angle = _homeAngle;
+    } else {
+      angle = _calculateAngle(index->getAngle() / 10); // All other positions are relative to home angle
+    }
     _getCoordinates(x, y, &positionX, &positionY, radius + (_pitOffset / 2),
                     angle); // Calculate coordinates to plot each position indicator, draw these before the pit wall so
                             // it clears the centre
@@ -136,7 +143,11 @@ void TurntableDisplay::_drawBridge(Turntable *turntable) {
   bool isMoving = turntable->isMoving();
   for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
     if (index->getId() == _bridgePosition) {
-      angle = index->getAngle() / 10;
+      if (_bridgePosition == 0) {
+        angle = _homeAngle;
+      } else {
+        angle = _calculateAngle(index->getAngle() / 10);
+      }
       break;
     }
   }
@@ -201,4 +212,9 @@ void TurntableDisplay::_getCoordinates(uint16_t x, uint16_t y, float *xp, float 
   float sy1 = sin((a - 90) * _degreesToRadians);
   *xp = sx1 * r + x;
   *yp = sy1 * r + y;
+}
+
+float TurntableDisplay::_calculateAngle(float relativeAngle) {
+  float angle = fmod((relativeAngle + _homeAngle), 360.0f);
+  return angle;
 }
