@@ -35,7 +35,7 @@ void setup() {
   CONSOLE.begin(115200);
   CS_CONNECTION.begin(115200);
   setupDisplay();
-  delay(4000);
+  delay(2000); // Display the startup screen for 2 secs to ensure CS is up first
   CONSOLE.print("EX-Turntable Controller ");
   CONSOLE.println(VERSION);
   setupCSClient(CONSOLE, CS_CONNECTION);

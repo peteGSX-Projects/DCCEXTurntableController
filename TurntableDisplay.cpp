@@ -37,12 +37,11 @@ void TurntableDisplay::begin() {
   Turntable *turntable = _csClient.turntables->getFirst();
   if (turntable) {
     setPosition(turntable->getIndex()); // Set initial position
-    update();
   }
 }
 
 void TurntableDisplay::update() {
-  if (!_needsRedraw) // Don't need to update if it doesn't need it, and it's not moving
+  if (!_needsRedraw) // Only update if redraw flagged
     return;
   Turntable *turntable = _csClient.turntables->getFirst();
   if (!turntable) // If we don't have a turntable object, can't do anything

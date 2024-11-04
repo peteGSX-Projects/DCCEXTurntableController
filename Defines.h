@@ -20,6 +20,9 @@
 
 #include <TFT_eSPI.h>
 
+#define SERIAL_CLIENT 1
+#define WIFI_CLIENT 2
+
 /*
 If we haven't got a custom config.h, use the example
 */
@@ -31,10 +34,14 @@ If we haven't got a custom config.h, use the example
 
 /*
 If not defined in myConfig.h, define the console and DCC-EX client connection streams here
+Default client type is serial
 */
 #ifndef CONSOLE
 #define CONSOLE Serial
 #endif // CONSOLE
+#ifndef CLIENT_TYPE
+#define CLIENT_TYPE SERIAL_CLIENT
+#endif // CLIENT_TYPE
 #ifndef CS_CONNECTION
 #define CS_CONNECTION Serial1
 #endif // CS_CONNECTION
