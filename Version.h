@@ -18,9 +18,11 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define VERSION "0.0.6"
+#define VERSION "0.0.7"
 
 /*
+0.0.7 includes:
+  - Add support for ESP32 as a WiFi client
 0.0.6 includes:
   - Correct logic to calculate position angles from home
 0.0.5 includes:
