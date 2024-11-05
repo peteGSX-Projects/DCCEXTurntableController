@@ -1,0 +1,3 @@
+User-agent: *
+
+Sitemap: https://petegsx-projects.github.io/DCCEXTurntableController/sitemap.xml
