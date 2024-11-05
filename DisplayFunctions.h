@@ -22,13 +22,23 @@
 
 extern TurntableDisplay turntableDisplay;
 
-/// @brief Set initial display state - show version then clear
+/// @brief Setup display object
 void setupDisplay();
+
+/// @brief Display DCC-EX logo and software version
+void displayStartupScreen();
 
 /// @brief Create the turntable display when info is received
 void createTurntableDisplay();
 
 /// @brief Placeholder to keep the display up to date
 void updateDisplay();
+
+/// @brief If a connection to the CommandStation cannot be made, display error
+void displayConnectionError();
+
+/// @brief Display the provided status text
+/// @param status Char array of status text
+void displayStatus(const char *status);
 
 #endif // DISPLAYFUNCTIONS_H

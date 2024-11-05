@@ -27,6 +27,8 @@ TFT_eSprite displaySprite = TFT_eSprite(&display);
 TurntableDisplay turntableDisplay =
     TurntableDisplay(displaySprite, csClient, BACKGROUND_COLOUR, PIT_OFFSET, PIT_COLOUR, HOME_COLOUR, POSITION_COLOUR,
                      BRIDGE_COLOUR, BRIDGE_MOVING_COLOUR, BRIDGE_POSITION_COLOUR, POSITION_TEXT_COLOUR, BLINK_DELAY);
+uint16_t statusX;
+uint16_t statusY;
 
 void setupDisplay() {
   display.init();
@@ -34,11 +36,14 @@ void setupDisplay() {
   pinMode(GC9A01_BL, OUTPUT);
   digitalWrite(GC9A01_BL, HIGH);
 #endif
+  display.setRotation(GC9A01_ROTATION);
+  displaySprite.createSprite(display.width(), display.height());
+}
+
+void displayStartupScreen() {
   const GFXfont *dccexFont = DCCEX_FONT;
   const GFXfont *dccexSmallFont = DCCEX_SMALL_FONT;
   const GFXfont *dccexVersionFont = DCCEX_VERSION_FONT;
-  display.setRotation(GC9A01_ROTATION);
-  displaySprite.createSprite(display.width(), display.height());
   display.setFreeFont(dccexFont);
   display.fillScreen(DCCEX_BACKGROUND);
   uint8_t dccexFontHeight = dccexFont->yAdvance;
@@ -67,11 +72,22 @@ void setupDisplay() {
   display.setFreeFont(dccexVersionFont);
   display.drawString(VERSION, x - (versionTextWidth / 2) + versionTextWidth, y);
   y += fontHeight;
-  display.setTextColor(DCCEX_DCC, DCCEX_BACKGROUND);
-  display.setFreeFont(dccexSmallFont);
-  display.drawString("Waiting...", x, y);
+  statusX = x;
+  statusY = y;
 }
 
 void createTurntableDisplay() { turntableDisplay.begin(); }
 
 void updateDisplay() { turntableDisplay.update(); }
+
+void displayConnectionError() {
+  displayStartupScreen();
+  displayStatus("CommandStation connect failed");
+}
+
+void displayStatus(const char *status) {
+  const GFXfont *dccexSmallFont = DCCEX_SMALL_FONT;
+  display.setTextColor(DCCEX_DCC, DCCEX_BACKGROUND);
+  display.setFreeFont(dccexSmallFont);
+  display.drawString(status, statusX, statusY);
+}
