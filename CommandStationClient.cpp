@@ -17,6 +17,7 @@
 
 #include "CommandStationClient.h"
 #include "CommandStationListener.h"
+#include "DisplayFunctions.h"
 
 const unsigned long retrieveTurntableRetryDelay = 2000; // ms between retrying requesting turntable info
 unsigned long lastRetrieveTurntableRetry = 0;           // time in ms of last retry
@@ -29,7 +30,7 @@ CSListener csListener;
 void setupCSClient(Stream &consoleStream, Stream &csConnectionStream) {
   csClient.setLogStream(&consoleStream);
   csClient.setDelegate(&csListener);
-  csClient.enableHeartbeat();
+  csClient.enableHeartbeat(10);
   csClient.connect(&csConnectionStream);
 }
 
@@ -45,6 +46,7 @@ void processCSClient() {
     } else if (!retrievalErrorDisplayed && retrieveTurntableRetries == 0) {
       retrievalErrorDisplayed = true;
       CONSOLE.println("Turntable info not received within the retry period");
+      displayObjectRetrievalError();
     }
   }
 }

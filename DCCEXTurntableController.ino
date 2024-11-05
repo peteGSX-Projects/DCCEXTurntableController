@@ -47,6 +47,7 @@ void setup() {
   setupCSClient(CONSOLE, CS_CONNECTION);
 #elif (CLIENT_TYPE == WIFI_CLIENT)
   connectWiFi();
+  connectCommandStation();
   setupCSClient(CONSOLE, wifiClient);
 #endif // CLIENT_TYPE
 }
