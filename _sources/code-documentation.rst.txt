@@ -2,4 +2,4 @@ Code Documentation
 ==================
 
 .. doxygenindex:: 
-  :project: DCCEXProtocol
+  :project: DCCEXTurntableController
