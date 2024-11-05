@@ -29,16 +29,26 @@ Include the required libraries
 #include "InputFunctions.h"
 #include "Version.h"
 #include <Arduino.h>
+#if (CLIENT_TYPE == WIFI_CLIENT)
+#include "WiFiFunctions.h"
+#endif // CLIENT_TYPE
 
 /// @brief Initial setup
 void setup() {
   CONSOLE.begin(115200);
   CS_CONNECTION.begin(115200);
   setupDisplay();
+  displayStartupScreen();
+  displayStatus("Connecting...");
   delay(2000); // Display the startup screen for 2 secs to ensure CS is up first
   CONSOLE.print("EX-Turntable Controller ");
   CONSOLE.println(VERSION);
+#if (CLIENT_TYPE == SERIAL_CLIENT)
   setupCSClient(CONSOLE, CS_CONNECTION);
+#elif (CLIENT_TYPE == WIFI_CLIENT)
+  connectWiFi();
+  setupCSClient(CONSOLE, wifiClient);
+#endif // CLIENT_TYPE
 }
 
 /// @brief Main loop

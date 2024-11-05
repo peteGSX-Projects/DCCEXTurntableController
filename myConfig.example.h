@@ -16,16 +16,31 @@
 
 /*
 If required, define the console and DCC-EX client connection streams here
+Only define *either* SERIAL_CLIENT or WIFI_CLIENT
 */
-// #define CONSOLE Serial
-// #define CS_CONNECTION Serial1
+// #define CONSOLE Serial // default
+// #define CLIENT_TYPE SERIAL_CLIENT // default
+// #define CLIENT_TYPE WIFI_CLIENT
+// #define CS_CONNECTION Serial1 // default
+
+/*
+If defining WIFI_CLIENT, set your WiFi and CommandStation details here
+*/
+// #define WIFI_SSID "Your WiFi SSID"
+// #define WIFI_PASSWORD "Your WiFi password"
+// #define COMMANDSTATION_IP "192.168.4.1"
+// #define COMMANDSTATION_PORT 2560
 
 /*
 If required, define the rotary encoder pins and options here
 */
-// #define ROTARY_BTN PB15
-// #define ROTARY_DT PB14
-// #define ROTARY_CLK PB13
+// #define ROTARY_BTN PB15 // Blackpill default
+// #define ROTARY_BTN 25 // ESP32 default
+// #define ROTARY_DT PB14 // Blackpill default
+// #define ROTARY_DT 26 // ESP32 default
+// #define ROTARY_CLK PB13 // Blackpill default
+// #define ROTARY_CLK 27 // ESP32 default
+
 // #define FULL_STEP // Use this to enable a full step of the rotary encoder
 // #define HALF_STEP // Use this to enable a half step of the rotary encoder (default)
 
@@ -33,7 +48,8 @@ If required, define the rotary encoder pins and options here
 If required, define the GC9A01 display pins here
 Note only backlight is defined here, the rest should be in the TFT_eSPI config
 */
-// #define GC9A01_BL PA1
+// #define GC9A01_BL PA1 // Blackpill default
+// #define GC9A01_BL 21 // ESP32 default
 
 /*
 If required, define GC9A01 options here
