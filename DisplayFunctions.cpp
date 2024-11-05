@@ -85,6 +85,11 @@ void displayConnectionError() {
   displayStatus("CommandStation connect failed");
 }
 
+void displayObjectRetrievalError() {
+  displayStartupScreen();
+  displayStatus("Could not get turntable info");
+}
+
 void displayStatus(const char *status) {
   const GFXfont *dccexSmallFont = DCCEX_SMALL_FONT;
   display.setTextColor(DCCEX_DCC, DCCEX_BACKGROUND);

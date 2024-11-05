@@ -37,6 +37,9 @@ void updateDisplay();
 /// @brief If a connection to the CommandStation cannot be made, display error
 void displayConnectionError();
 
+/// @brief If retrieving the turntable object fails, display error
+void displayObjectRetrievalError();
+
 /// @brief Display the provided status text
 /// @param status Char array of status text
 void displayStatus(const char *status);
