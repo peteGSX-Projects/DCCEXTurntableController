@@ -17,11 +17,13 @@
 /*
 If required, define the console and DCC-EX client connection streams here
 Only define *either* SERIAL_CLIENT or WIFI_CLIENT
+ENABLE_HEARTBEAT is on by default for WiFi only to send every 60 seconds
 */
 // #define CONSOLE Serial // default
 // #define CLIENT_TYPE SERIAL_CLIENT // default
 // #define CLIENT_TYPE WIFI_CLIENT
 // #define CS_CONNECTION Serial1 // default
+// #define ENABLE_HEARTBEAT 60000 // default with WIFI_CLIENT
 
 /*
 If defining WIFI_CLIENT, set your WiFi and CommandStation details here

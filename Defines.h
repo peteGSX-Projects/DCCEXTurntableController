@@ -65,6 +65,9 @@ If not defined in myConfig.h, define placeholder WiFi connection details
 #ifndef COMMANDSTATION_PORT
 #define COMMANDSTATION_PORT 2560
 #endif // COMMANDSTATION_PORT
+#ifndef ENABLE_HEARTBEAT
+#define ENABLE_HEARTBEAT 60000
+#endif // ENABLE_HEARTBEAT
 
 #endif // CLIENT_TYPE==WIFI_CLIENT
 
@@ -165,15 +168,5 @@ If not defined in myConfig.h, define turntable display parameters here
 #ifndef PIT_OFFSET
 #define PIT_OFFSET 30
 #endif // PIT_OFFSET
-
-/*
-Colour definitions and fonts for the DCC-EX logo
-*/
-#define DCCEX_DCC 0x01C8
-#define DCCEX_EX 0x03B6
-#define DCCEX_BACKGROUND 0xFFFF
-#define DCCEX_FONT &FreeSansBold12pt7b
-#define DCCEX_SMALL_FONT &FreeMono9pt7b
-#define DCCEX_VERSION_FONT &FreeMonoBold9pt7b
 
 #endif // DEFINES_H

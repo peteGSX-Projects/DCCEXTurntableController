@@ -30,7 +30,9 @@ CSListener csListener;
 void setupCSClient(Stream &consoleStream, Stream &csConnectionStream) {
   csClient.setLogStream(&consoleStream);
   csClient.setDelegate(&csListener);
-  csClient.enableHeartbeat(10);
+#if defined(ENABLE_HEARTBEAT)
+  csClient.enableHeartbeat(ENABLE_HEARTBEAT);
+#endif // ENABLE_HEARTBEAT
   csClient.connect(&csConnectionStream);
 }
 
