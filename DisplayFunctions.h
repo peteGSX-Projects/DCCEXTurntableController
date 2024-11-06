@@ -26,6 +26,9 @@ extern TurntableDisplay turntableDisplay;
 void setupDisplay();
 
 /// @brief Display DCC-EX logo and software version
+void displaySoftwareInfo();
+
+/// @brief Initial screen display
 void displayStartupScreen();
 
 /// @brief Create the turntable display when info is received

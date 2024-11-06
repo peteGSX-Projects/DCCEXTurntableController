@@ -36,14 +36,13 @@ Include the required libraries
 /// @brief Initial setup
 void setup() {
   CONSOLE.begin(115200);
-  CS_CONNECTION.begin(115200);
   setupDisplay();
   displayStartupScreen();
-  displayStatus("Connecting...");
   delay(2000); // Display the startup screen for 2 secs to ensure CS is up first
   CONSOLE.print("EX-Turntable Controller ");
   CONSOLE.println(VERSION);
 #if (CLIENT_TYPE == SERIAL_CLIENT)
+  CS_CONNECTION.begin(115200);
   setupCSClient(CONSOLE, CS_CONNECTION);
 #elif (CLIENT_TYPE == WIFI_CLIENT)
   connectWiFi();
