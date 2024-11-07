@@ -21,33 +21,54 @@
 
 WiFiClient wifiClient;
 
-void connectWiFi() {
-  CONSOLE.print("Connect to WiFi SSID|password: ");
-  CONSOLE.print(WIFI_SSID);
-  CONSOLE.print("|");
-  CONSOLE.println(WIFI_PASSWORD);
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
+const unsigned long wifiRetryDelay = 1000;     // ms between WiFi connection attempts
+unsigned long lastWiFiRetry = 0;               // time in ms of last attempt to connect to WiFi
+uint8_t wifiRetries = 5;                       // number of retries for WiFi connection
+const unsigned long csClientRetryDelay = 1000; // ms between client connection attempts
+unsigned long lastClientConnectionRetry = 0;   // time is ms of last attempt to connect to CS
+uint8_t csClientRetries = 5;                   // number of retries for CommandStation connection
+bool wifiStarted = false;                      // flag that WiFi.begin() has been called
+
+bool connectWiFi() {
+  if (!wifiStarted) {
+    CONSOLE.print("Connect to WiFi SSID|password: ");
+    CONSOLE.print(WIFI_SSID);
+    CONSOLE.print("|");
+    CONSOLE.println(WIFI_PASSWORD);
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+    wifiStarted = true;
   }
-  CONSOLE.print("Connected to WiFi with IP ");
-  CONSOLE.println(WiFi.localIP());
+  if (WiFi.status() == WL_CONNECTED) {
+    return true;
+  } else if (WiFi.status() != WL_CONNECTED && wifiRetries > 0 && (millis() - lastWiFiRetry) > lastWiFiRetry) {
+    wifiRetries--;
+    lastWiFiRetry = millis();
+    return false;
+  } else if (WiFi.status() != WL_CONNECTED && wifiRetries == 0) {
+    displayConnectionError();
+    return false;
+  }
+  return false;
 }
 
-void connectCommandStation() {
-  CONSOLE.print("Connect to CommandStation IP|port: ");
-  CONSOLE.print(COMMANDSTATION_IP);
-  CONSOLE.print("|");
-  CONSOLE.println(COMMANDSTATION_PORT);
-  IPAddress commandStationIP = convertIP(COMMANDSTATION_IP);
-  if (!wifiClient.connect(commandStationIP, COMMANDSTATION_PORT)) {
-    CONSOLE.println("Connection to CommandStation failed");
+bool connectCommandStation() {
+  if (wifiClient.connected()) {
+    return true;
+  } else if (csClientRetries > 0 && (millis() - lastClientConnectionRetry) > csClientRetryDelay) {
+    csClientRetries--;
+    lastClientConnectionRetry = millis();
+    CONSOLE.print("Connect to CommandStation IP|port: ");
+    CONSOLE.print(COMMANDSTATION_IP);
+    CONSOLE.print("|");
+    CONSOLE.println(COMMANDSTATION_PORT);
+    IPAddress commandStationIP = convertIP(COMMANDSTATION_IP);
+    wifiClient.connect(commandStationIP, COMMANDSTATION_PORT);
+    return false;
+  } else if (csClientRetries == 0) {
     displayConnectionError();
-    while (1) {
-      delay(1000);
-    }
+    return false;
   }
-  CONSOLE.println("Connected to CommandStation");
+  return false;
 }
 
 IPAddress convertIP(const char *ipAddressString) {

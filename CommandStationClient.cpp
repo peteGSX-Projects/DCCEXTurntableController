@@ -17,15 +17,40 @@
 
 #include "CommandStationClient.h"
 #include "CommandStationListener.h"
+#include "Defines.h"
 #include "DisplayFunctions.h"
+
+#if (CLIENT_TYPE == WIFI_CLIENT)
+#include "WiFiFunctions.h"
+#endif // CLIENT_TYPE
 
 const unsigned long retrieveTurntableRetryDelay = 2000; // ms between retrying requesting turntable info
 unsigned long lastRetrieveTurntableRetry = 0;           // time in ms of last retry
 uint8_t retrieveTurntableRetries = 5;                   // number of times left to retry requesting turntable info
 bool retrievalErrorDisplayed = false;                   // flag an error has already been displayed
+bool csConnected = false;                               // flag to check and managed the CS connection
 
 DCCEXProtocol csClient;
 CSListener csListener;
+
+void connectCSClient() {
+  if (!csConnected) {
+#if (CLIENT_TYPE == SERIAL_CLIENT)
+    CS_CONNECTION.begin(115200);
+    setupCSClient(CONSOLE, CS_CONNECTION);
+    csConnected = true; // Serial doesn't have state to manage like WiFi
+#elif (CLIENT_TYPE == WIFI_CLIENT)
+    bool wifiConnect = connectWiFi();
+    if (wifiConnect) {
+      bool csClientConnect = connectCommandStation();
+      if (csClientConnect) {
+        setupCSClient(CONSOLE, wifiClient);
+        csConnected = true;
+      }
+    }
+#endif // CLIENT_TYPE
+  }
+}
 
 void setupCSClient(Stream &consoleStream, Stream &csConnectionStream) {
   csClient.setLogStream(&consoleStream);

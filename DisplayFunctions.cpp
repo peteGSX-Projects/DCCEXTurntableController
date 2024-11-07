@@ -83,7 +83,7 @@ void displaySoftwareInfo() {
   statusY = y;
 }
 
-void displayStartupScreen() {
+void displayConnectingScreen() {
   displaySoftwareInfo();
   displayStatus("Connecting...");
 }

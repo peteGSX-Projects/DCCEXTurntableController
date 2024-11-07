@@ -23,6 +23,9 @@
 
 extern DCCEXProtocol csClient;
 
+/// @brief Connect to the CommandStation and ensure it's alive
+void connectCSClient();
+
 /// @brief Setup EX-CommandStation client:
 /// - associates the console and CommandStation connections with the client object
 /// - sets up the listener for broadcasts/responses
