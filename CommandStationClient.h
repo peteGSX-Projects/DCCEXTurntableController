@@ -18,10 +18,13 @@
 #ifndef COMMANDSTATIONCLIENT_H
 #define COMMANDSTATIONCLIENT_H
 
+#include "CommandStationListener.h" // added for testing
 #include <Arduino.h>
 #include <DCCEXProtocol.h>
 
 extern DCCEXProtocol csClient;
+extern bool csConnected;      // added for testing to externalise CS connection
+extern CSListener csListener; // added for testing
 
 /// @brief Connect to the CommandStation and ensure it's alive
 void connectCSClient();

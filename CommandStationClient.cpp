@@ -16,7 +16,7 @@
  */
 
 #include "CommandStationClient.h"
-#include "CommandStationListener.h"
+// #include "CommandStationListener.h" // move to CommandStationClient.h for testing
 #include "Defines.h"
 #include "DisplayFunctions.h"
 
@@ -62,18 +62,20 @@ void setupCSClient(Stream &consoleStream, Stream &csConnectionStream) {
 }
 
 void processCSClient() {
-  csClient.check();
-  if (!csClient.receivedLists()) {
-    unsigned long currentMillis = millis();
-    if (currentMillis - lastRetrieveTurntableRetry > retrieveTurntableRetryDelay && retrieveTurntableRetries > 0) {
-      lastRetrieveTurntableRetry = currentMillis;
-      retrieveTurntableRetries--;
-      csClient.getLists(false, false, false, true);
-      CONSOLE.println("Requesting turntable info");
-    } else if (!retrievalErrorDisplayed && retrieveTurntableRetries == 0) {
-      retrievalErrorDisplayed = true;
-      CONSOLE.println("Turntable info not received within the retry period");
-      displayObjectRetrievalError();
+  if (csConnected) {
+    csClient.check();
+    if (!csClient.receivedLists()) {
+      unsigned long currentMillis = millis();
+      if (currentMillis - lastRetrieveTurntableRetry > retrieveTurntableRetryDelay && retrieveTurntableRetries > 0) {
+        lastRetrieveTurntableRetry = currentMillis;
+        retrieveTurntableRetries--;
+        csClient.getLists(false, false, false, true);
+        CONSOLE.println("Requesting turntable info");
+      } else if (!retrievalErrorDisplayed && retrieveTurntableRetries == 0) {
+        retrievalErrorDisplayed = true;
+        CONSOLE.println("Turntable info not received within the retry period");
+        displayObjectRetrievalError();
+      }
     }
   }
 }

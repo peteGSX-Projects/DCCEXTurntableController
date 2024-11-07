@@ -28,6 +28,7 @@ Include the required libraries
 #include "DisplayFunctions.h"
 #include "InputFunctions.h"
 #include "Version.h"
+#include "WiFiFunctions.h" // added for testing
 #include <Arduino.h>
 
 /// @brief Initial setup
@@ -42,7 +43,22 @@ void setup() {
 
 /// @brief Main loop
 void loop() {
-  connectCSClient();      // Make sure connection to CS is alive
+  // connectCSClient();      // Make sure connection to CS is alive
+  if (!csConnected) {
+    bool wifiConnect = connectWiFi();
+    if (wifiConnect) {
+      bool csClientConnect = connectCommandStation();
+      if (csClientConnect) {
+        csClient.setLogStream(&CONSOLE);
+        csClient.setDelegate(&csListener);
+#if defined(ENABLE_HEARTBEAT)
+        csClient.enableHeartbeat(ENABLE_HEARTBEAT);
+#endif // ENABLE_HEARTBEAT
+        csClient.connect(&wifiClient);
+        csConnected = true;
+      }
+    }
+  }
   processCSClient();      // Ensure objects are retrieved and broadcasts are received
   updateDisplay();        // Ensure display shows current state
   processEncoderButton(); // Process button presses
