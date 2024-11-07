@@ -35,6 +35,7 @@ bool connectWiFi() {
     CONSOLE.print(WIFI_SSID);
     CONSOLE.print("|");
     CONSOLE.println(WIFI_PASSWORD);
+    displayConnectingScreen();
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     wifiStarted = true;
   }
@@ -61,6 +62,7 @@ bool connectCommandStation() {
     CONSOLE.print(COMMANDSTATION_IP);
     CONSOLE.print("|");
     CONSOLE.println(COMMANDSTATION_PORT);
+    displayConnectingScreen();
     IPAddress commandStationIP = convertIP(COMMANDSTATION_IP);
     wifiClient.connect(commandStationIP, COMMANDSTATION_PORT);
     return false;

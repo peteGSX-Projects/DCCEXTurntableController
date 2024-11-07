@@ -88,6 +88,11 @@ void displayConnectingScreen() {
   displayStatus("Connecting...");
 }
 
+void displayRetrievingInfo() {
+  displaySoftwareInfo();
+  displayStatus("Retrieve turntable...");
+}
+
 void createTurntableDisplay() { turntableDisplay.begin(); }
 
 void updateDisplay() { turntableDisplay.update(); }
