@@ -16,7 +16,7 @@
  */
 
 #include "CommandStationClient.h"
-// #include "CommandStationListener.h" // move to CommandStationClient.h for testing
+#include "CommandStationListener.h"
 #include "Defines.h"
 #include "DisplayFunctions.h"
 
@@ -34,22 +34,17 @@ DCCEXProtocol csClient;
 CSListener csListener;
 
 void connectCSClient() {
-  if (!csConnected) {
-#if (CLIENT_TYPE == SERIAL_CLIENT)
-    CS_CONNECTION.begin(115200);
-    setupCSClient(CONSOLE, CS_CONNECTION);
-    csConnected = true; // Serial doesn't have state to manage like WiFi
-#elif (CLIENT_TYPE == WIFI_CLIENT)
-    bool wifiConnect = connectWiFi();
-    if (wifiConnect) {
-      bool csClientConnect = connectCommandStation();
-      if (csClientConnect) {
-        setupCSClient(CONSOLE, wifiClient);
-        csConnected = true;
-      }
-    }
-#endif // CLIENT_TYPE
+  if (csConnected) {
+    return;
   }
+#if (CLIENT_TYPE == SERIAL_CLIENT)
+  CS_CONNECTION.begin(115200);
+  setupCSClient(CONSOLE, CS_CONNECTION);
+  csConnected = true; // Serial doesn't have state to manage like WiFi
+#elif (CLIENT_TYPE == WIFI_CLIENT)
+  setupCSClient(CONSOLE, wifiClient);
+  csConnected = true;
+#endif // CLIENT_TYPE
 }
 
 void setupCSClient(Stream &consoleStream, Stream &csConnectionStream) {

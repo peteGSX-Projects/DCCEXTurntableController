@@ -28,8 +28,11 @@ Include the required libraries
 #include "DisplayFunctions.h"
 #include "InputFunctions.h"
 #include "Version.h"
-#include "WiFiFunctions.h" // added for testing
 #include <Arduino.h>
+
+#if (CLIENT_TYPE == WIFI_CLIENT)
+#include "WiFiFunctions.h"
+#endif // CLIENT_TYPE
 
 /// @brief Initial setup
 void setup() {
@@ -43,23 +46,17 @@ void setup() {
 
 /// @brief Main loop
 void loop() {
-  // connectCSClient();      // Make sure connection to CS is alive
-  if (!csConnected) {
-    bool wifiConnect = connectWiFi();
-    if (wifiConnect) {
-      bool csClientConnect = connectCommandStation();
-      if (csClientConnect) {
-        csClient.setLogStream(&CONSOLE);
-        csClient.setDelegate(&csListener);
-#if defined(ENABLE_HEARTBEAT)
-        csClient.enableHeartbeat(ENABLE_HEARTBEAT);
-#endif // ENABLE_HEARTBEAT
-        csClient.connect(&wifiClient);
-        csConnected = true;
-      }
-    }
+  bool connectionState = true; // Default to true for serial connection, WiFi overrides if not
+#if (CLIENT_TYPE == WIFI_CLIENT)
+  connectionState = connectWiFi(); // Make sure WiFi connection is alive
+  if (connectionState) {
+    connectionState = connectCommandStation(); // IF WiFi alive, make sure CS connection is alive
   }
-  processCSClient();      // Ensure objects are retrieved and broadcasts are received
+#endif // CLIENT_TYPE
+  if (connectionState) { // Only process clients if connection is true
+    connectCSClient();   // Make sure connection to CS is alive
+    processCSClient();   // Ensure objects are retrieved and broadcasts are received
+  }
   updateDisplay();        // Ensure display shows current state
   processEncoderButton(); // Process button presses
   processEncoder();       // Process encoder rotations

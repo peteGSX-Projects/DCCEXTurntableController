@@ -22,7 +22,8 @@ ENABLE_HEARTBEAT is on by default for WiFi only to send every 60 seconds
 // #define CONSOLE Serial // default
 // #define CLIENT_TYPE SERIAL_CLIENT // default
 // #define CLIENT_TYPE WIFI_CLIENT
-// #define CS_CONNECTION Serial1 // default
+// #define CS_CONNECTION Serial1 // default for Blackpill
+// #define CS_CONNECTION Serial2 // default for ESP32
 // #define ENABLE_HEARTBEAT 60000 // default with WIFI_CLIENT
 
 /*
