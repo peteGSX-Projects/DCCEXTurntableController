@@ -43,7 +43,11 @@ Default client type is serial
 #define CLIENT_TYPE SERIAL_CLIENT
 #endif // CLIENT_TYPE
 #ifndef CS_CONNECTION
+#if defined(ARDUINO_ARCH_STM32) // Blackpill default
 #define CS_CONNECTION Serial1
+#elif defined(ARDUINO_ARCH_ESP32) // ESP32 default
+#define CS_CONNECTION Serial2
+#endif // Device type
 #endif // CS_CONNECTION
 
 #if (CLIENT_TYPE == WIFI_CLIENT) // Only process WiFi details if that's the client type

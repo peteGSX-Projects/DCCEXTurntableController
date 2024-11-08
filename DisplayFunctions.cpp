@@ -83,9 +83,14 @@ void displaySoftwareInfo() {
   statusY = y;
 }
 
-void displayStartupScreen() {
+void displayConnectingScreen() {
   displaySoftwareInfo();
   displayStatus("Connecting...");
+}
+
+void displayRetrievingInfo() {
+  displaySoftwareInfo();
+  displayStatus("Retrieve turntable...");
 }
 
 void createTurntableDisplay() { turntableDisplay.begin(); }

@@ -28,8 +28,11 @@ void setupDisplay();
 /// @brief Display DCC-EX logo and software version
 void displaySoftwareInfo();
 
-/// @brief Initial screen display
-void displayStartupScreen();
+/// @brief Display connecting status
+void displayConnectingScreen();
+
+/// @brief Display retrieving info after connect successful
+void displayRetrievingInfo();
 
 /// @brief Create the turntable display when info is received
 void createTurntableDisplay();

@@ -29,6 +29,7 @@ Include the required libraries
 #include "InputFunctions.h"
 #include "Version.h"
 #include <Arduino.h>
+
 #if (CLIENT_TYPE == WIFI_CLIENT)
 #include "WiFiFunctions.h"
 #endif // CLIENT_TYPE
@@ -37,24 +38,26 @@ Include the required libraries
 void setup() {
   CONSOLE.begin(115200);
   setupDisplay();
-  displayStartupScreen();
+  displaySoftwareInfo();
   delay(2000); // Display the startup screen for 2 secs to ensure CS is up first
   CONSOLE.print("EX-Turntable Controller ");
   CONSOLE.println(VERSION);
-#if (CLIENT_TYPE == SERIAL_CLIENT)
-  CS_CONNECTION.begin(115200);
-  setupCSClient(CONSOLE, CS_CONNECTION);
-#elif (CLIENT_TYPE == WIFI_CLIENT)
-  connectWiFi();
-  connectCommandStation();
-  setupCSClient(CONSOLE, wifiClient);
-#endif // CLIENT_TYPE
 }
 
 /// @brief Main loop
 void loop() {
-  processCSClient();
-  updateDisplay();
-  processEncoderButton();
-  processEncoder();
+  bool connectionState = true; // Default to true for serial connection, WiFi overrides if not
+#if (CLIENT_TYPE == WIFI_CLIENT)
+  connectionState = connectWiFi(); // Make sure WiFi connection is alive
+  if (connectionState) {
+    connectionState = connectCommandStation(); // IF WiFi alive, make sure CS connection is alive
+  }
+#endif // CLIENT_TYPE
+  if (connectionState) { // Only process clients if connection is true
+    connectCSClient();   // Make sure connection to CS is alive
+    processCSClient();   // Ensure objects are retrieved and broadcasts are received
+  }
+  updateDisplay();        // Ensure display shows current state
+  processEncoderButton(); // Process button presses
+  processEncoder();       // Process encoder rotations
 }

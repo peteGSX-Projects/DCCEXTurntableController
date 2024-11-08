@@ -27,10 +27,12 @@
 extern WiFiClient wifiClient;
 
 /// @brief Connect to WiFi using the SSID and password defined in the user's myConfig.h
-void connectWiFi();
+/// @return True if WiFi connects successfully
+bool connectWiFi();
 
 /// @brief Connect to the CommandStation using the IP address and port in the user's myConfig.h
-void connectCommandStation();
+/// @return True if connection to CommandStation IP/port successful
+bool connectCommandStation();
 
 /// @brief Validates and converts an IP address from the preprocessor macro string to an IPAddress object
 /// @param ipAddressString Preprocessor macro IP address string COMMANDSTATION_IP
