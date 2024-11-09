@@ -25,8 +25,8 @@
 class TurntableDisplay {
 public:
   /// @brief Constructor for the TurntableDisplay object, results in the basic turntable drawn on screen
-  /// @param displaySprite Reference to an existing TFT_eSprite object
-  /// @param csClient Reference to an existing DCCEXProtocol client object
+  /// @param displaySprite Pointer to an existing TFT_eSprite object
+  /// @param csClient Pointer to an existing DCCEXProtocol client object
   /// @param textColour 16 bit colour for the text
   /// @param backgroundColour 16 bit colour for the background
   /// @param bridgeColour 16 bit colour for the turntable bridge
@@ -34,7 +34,7 @@ public:
   /// @param bridgePositionColour 16 bit colour for the end of the bridge indicating the selected position
   /// @param positionTextColour 16 bit colour for the name of the selected position
   /// @param blinkDelay Delay in ms to blink position text and bridge when turntable is moving
-  TurntableDisplay(TFT_eSprite &displaySprite, DCCEXProtocol &csClient, uint16_t backgroundColour, uint8_t pitOffset,
+  TurntableDisplay(TFT_eSprite *displaySprite, DCCEXProtocol *csClient, uint16_t backgroundColour, uint8_t pitOffset,
                    uint16_t pitColour, uint16_t homeColour, uint16_t positionColour, uint16_t bridgeColour,
                    uint16_t bridgeMovingColour, uint16_t bridgePositionColour, uint16_t positionTextColour,
                    unsigned long blinkDelay);
@@ -61,8 +61,8 @@ public:
   uint8_t getPosition();
 
 private:
-  TFT_eSprite &_displaySprite;    // Reference to an existing TFT_eSprite object
-  DCCEXProtocol &_csClient;       // Pointer to an existing DCC-EX protocol turntable object
+  TFT_eSprite *_displaySprite;    // Pointer to an existing TFT_eSprite object
+  DCCEXProtocol *_csClient;       // Pointer to an existing DCC-EX protocol turntable object
   uint16_t _backgroundColour;     // 16 bit background colour
   uint8_t _pitOffset;             // Number of pixels to inset pit wall from edge of display
   uint16_t _pitColour;            // Colour of the pit wall

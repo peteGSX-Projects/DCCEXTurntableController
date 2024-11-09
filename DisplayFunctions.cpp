@@ -25,7 +25,7 @@
 TFT_eSPI display = TFT_eSPI();
 TFT_eSprite displaySprite = TFT_eSprite(&display);
 TurntableDisplay turntableDisplay =
-    TurntableDisplay(displaySprite, csClient, BACKGROUND_COLOUR, PIT_OFFSET, PIT_COLOUR, HOME_COLOUR, POSITION_COLOUR,
+    TurntableDisplay(&displaySprite, &csClient, BACKGROUND_COLOUR, PIT_OFFSET, PIT_COLOUR, HOME_COLOUR, POSITION_COLOUR,
                      BRIDGE_COLOUR, BRIDGE_MOVING_COLOUR, BRIDGE_POSITION_COLOUR, POSITION_TEXT_COLOUR, BLINK_DELAY);
 uint16_t statusX;
 uint16_t statusY;
