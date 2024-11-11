@@ -17,11 +17,17 @@
 
 #include "DeviceFunctions.h"
 
+#if defined(ARDUINO_ARCH_ESP32)
+#include <esp_system.h>
+#endif // ARCH ESP32
+
 void resetDevice() {
 #if defined(ARDUINO_ARCH_STM32)
   __disable_irq();
   NVIC_SystemReset();
   while (true) {
   };
+#elif defined(ARDUINO_ARCH_ESP32)
+  ESP.restart();
 #endif
 }

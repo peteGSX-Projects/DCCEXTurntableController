@@ -63,7 +63,7 @@ void TurntableDisplay::update() {
   }
   _drawTurntable(turntable);
   _drawBridge(turntable);
-  // _drawPositionName(turntable);
+  _drawPositionName(turntable);
   _displaySprite->pushSprite(0, 0);
 }
 
@@ -216,7 +216,9 @@ void TurntableDisplay::_drawPositionName(Turntable *turntable) {
   } else {
     _displaySprite->setTextColor(_backgroundColour);
   }
-  _displaySprite->drawString(positionName, x, y);
+  if (positionName) {
+    _displaySprite->drawString(positionName, x, y);
+  }
 }
 
 // =========================================================================

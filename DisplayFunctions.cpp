@@ -47,6 +47,7 @@ void setupDisplay() {
   digitalWrite(GC9A01_BL, HIGH);
 #endif
   display.setRotation(GC9A01_ROTATION);
+  displaySprite.setColorDepth(8); // Limit colour to 8 bit otherwise out of RAM
   displaySprite.createSprite(display.width(), display.height());
 }
 

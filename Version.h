@@ -22,7 +22,9 @@
 
 /*
 0.0.7 includes:
-  - Add support for ESP32 as a WiFi client
+  - Add support for ESP32 as both WiFi and serial client
+  - Set TFT_eSprite to 8 bit colour to fit in RAM
+  - Fix bug where nullptr position name causes a crash
 0.0.6 includes:
   - Correct logic to calculate position angles from home
 0.0.5 includes:
