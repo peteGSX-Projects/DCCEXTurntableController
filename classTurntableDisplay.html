@@ -72,9 +72,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a39c2e623ee9fe969efab87d3af880782"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTurntableDisplay.html#a39c2e623ee9fe969efab87d3af880782">TurntableDisplay</a> (TFT_eSprite &amp;displaySprite, DCCEXProtocol &amp;csClient, uint16_t backgroundColour, uint8_t pitOffset, uint16_t pitColour, uint16_t homeColour, uint16_t positionColour, uint16_t bridgeColour, uint16_t bridgeMovingColour, uint16_t bridgePositionColour, uint16_t positionTextColour, unsigned long blinkDelay)</td></tr>
-<tr class="memdesc:a39c2e623ee9fe969efab87d3af880782"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the <a class="el" href="classTurntableDisplay.html">TurntableDisplay</a> object, results in the basic turntable drawn on screen.  <a href="classTurntableDisplay.html#a39c2e623ee9fe969efab87d3af880782">More...</a><br /></td></tr>
-<tr class="separator:a39c2e623ee9fe969efab87d3af880782"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3597563cfa20e78986315dffef64b719"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTurntableDisplay.html#a3597563cfa20e78986315dffef64b719">TurntableDisplay</a> (TFT_eSprite *displaySprite, DCCEXProtocol *csClient, uint16_t backgroundColour, uint8_t pitOffset, uint16_t pitColour, uint16_t homeColour, uint16_t positionColour, uint16_t bridgeColour, uint16_t bridgeMovingColour, uint16_t bridgePositionColour, uint16_t positionTextColour, unsigned long blinkDelay)</td></tr>
+<tr class="memdesc:a3597563cfa20e78986315dffef64b719"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the <a class="el" href="classTurntableDisplay.html">TurntableDisplay</a> object, results in the basic turntable drawn on screen.  <a href="classTurntableDisplay.html#a3597563cfa20e78986315dffef64b719">More...</a><br /></td></tr>
+<tr class="separator:a3597563cfa20e78986315dffef64b719"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53cb5307e64affc0c6fe7641a4000a95"><td class="memItemLeft" align="right" valign="top"><a id="a53cb5307e64affc0c6fe7641a4000a95"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTurntableDisplay.html#a53cb5307e64affc0c6fe7641a4000a95">begin</a> ()</td></tr>
 <tr class="memdesc:a53cb5307e64affc0c6fe7641a4000a95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the initial turntable and bridge position, only to be called when lists have been received. <br /></td></tr>
@@ -99,8 +99,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:a98e42175640a69ab057224a7e6008c19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a39c2e623ee9fe969efab87d3af880782"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a39c2e623ee9fe969efab87d3af880782">&#9670;&nbsp;</a></span>TurntableDisplay()</h2>
+<a id="a3597563cfa20e78986315dffef64b719"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3597563cfa20e78986315dffef64b719">&#9670;&nbsp;</a></span>TurntableDisplay()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -108,13 +108,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
         <tr>
           <td class="memname">TurntableDisplay::TurntableDisplay </td>
           <td>(</td>
-          <td class="paramtype">TFT_eSprite &amp;&#160;</td>
+          <td class="paramtype">TFT_eSprite *&#160;</td>
           <td class="paramname"><em>displaySprite</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">DCCEXProtocol &amp;&#160;</td>
+          <td class="paramtype">DCCEXProtocol *&#160;</td>
           <td class="paramname"><em>csClient</em>, </td>
         </tr>
         <tr>
@@ -188,8 +188,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <p>Constructor for the <a class="el" href="classTurntableDisplay.html">TurntableDisplay</a> object, results in the basic turntable drawn on screen. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">displaySprite</td><td>Reference to an existing TFT_eSprite object </td></tr>
-    <tr><td class="paramname">csClient</td><td>Reference to an existing DCCEXProtocol client object </td></tr>
+    <tr><td class="paramname">displaySprite</td><td>Pointer to an existing TFT_eSprite object </td></tr>
+    <tr><td class="paramname">csClient</td><td>Pointer to an existing DCCEXProtocol client object </td></tr>
     <tr><td class="paramname">textColour</td><td>16 bit colour for the text </td></tr>
     <tr><td class="paramname">backgroundColour</td><td>16 bit colour for the background </td></tr>
     <tr><td class="paramname">bridgeColour</td><td>16 bit colour for the turntable bridge </td></tr>
