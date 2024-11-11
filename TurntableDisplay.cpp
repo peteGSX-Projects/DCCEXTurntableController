@@ -18,7 +18,7 @@
 #include "Defines.h"
 #include "TurntableDisplay.h"
 
-TurntableDisplay::TurntableDisplay(TFT_eSprite &displaySprite, DCCEXProtocol &csClient, uint16_t backgroundColour,
+TurntableDisplay::TurntableDisplay(TFT_eSprite *displaySprite, DCCEXProtocol *csClient, uint16_t backgroundColour,
                                    uint8_t pitOffset, uint16_t pitColour, uint16_t homeColour, uint16_t positionColour,
                                    uint16_t bridgeColour, uint16_t bridgeMovingColour, uint16_t bridgePositionColour,
                                    uint16_t positionTextColour, unsigned long blinkDelay)
@@ -34,17 +34,22 @@ TurntableDisplay::TurntableDisplay(TFT_eSprite &displaySprite, DCCEXProtocol &cs
 }
 
 void TurntableDisplay::begin() {
-  Turntable *turntable = _csClient.turntables->getFirst();
+  if (!_csClient) // If no client, can't process any turntable objects
+    return;
+  Turntable *turntable = _csClient->turntables->getFirst();
   if (turntable) {
     setPosition(turntable->getIndex()); // Set initial position
-    update();
   }
 }
 
 void TurntableDisplay::update() {
-  if (!_needsRedraw) // Don't need to update if it doesn't need it, and it's not moving
+  if (!_displaySprite) // If no display sprite object, can't do and display updates
     return;
-  Turntable *turntable = _csClient.turntables->getFirst();
+  if (!_csClient) // If no client, can't process any turntable objects
+    return;
+  if (!_needsRedraw) // Only update if redraw flagged
+    return;
+  Turntable *turntable = _csClient->turntables->getFirst();
   if (!turntable) // If we don't have a turntable object, can't do anything
     return;
   bool isMoving = turntable->isMoving();
@@ -59,11 +64,13 @@ void TurntableDisplay::update() {
   _drawTurntable(turntable);
   _drawBridge(turntable);
   _drawPositionName(turntable);
-  _displaySprite.pushSprite(0, 0);
+  _displaySprite->pushSprite(0, 0);
 }
 
 void TurntableDisplay::setNextPosition() {
-  Turntable *turntable = _csClient.turntables->getFirst();
+  if (!_csClient) // If no client, can't process any turntable objects
+    return;
+  Turntable *turntable = _csClient->turntables->getFirst();
   if (!turntable) // No turntable object, don't try to do anything
     return;
   if (turntable->isMoving()) // If moving, don't allow other changes
@@ -82,7 +89,9 @@ void TurntableDisplay::setNextPosition() {
 }
 
 void TurntableDisplay::setPreviousPosition() {
-  Turntable *turntable = _csClient.turntables->getFirst();
+  if (!_csClient) // If no client, can't process any turntable objects
+    return;
+  Turntable *turntable = _csClient->turntables->getFirst();
   if (!turntable) // No turntable object, don't try to do anything
     return;
   if (turntable->isMoving()) // If moving, don't allow other changes
@@ -101,7 +110,9 @@ void TurntableDisplay::setPreviousPosition() {
 }
 
 void TurntableDisplay::setPosition(uint8_t position) {
-  Turntable *turntable = _csClient.turntables->getFirst();
+  if (!_csClient) // If no client, can't process any turntable objects
+    return;
+  Turntable *turntable = _csClient->turntables->getFirst();
   if (!turntable)
     return;
   _bridgePosition = position;
@@ -111,9 +122,11 @@ void TurntableDisplay::setPosition(uint8_t position) {
 uint8_t TurntableDisplay::getPosition() { return _bridgePosition; }
 
 void TurntableDisplay::_drawTurntable(Turntable *turntable) {
-  _displaySprite.fillSprite(_backgroundColour); // Clear screen
-  uint16_t x = _displaySprite.width() / 2;      // Get X/Y for centre of screen for circle and positions
-  uint16_t y = _displaySprite.height() / 2;
+  if (!_displaySprite) // If no display sprite object, can't do and display updates
+    return;
+  _displaySprite->fillSprite(_backgroundColour); // Clear screen
+  uint16_t x = _displaySprite->width() / 2;      // Get X/Y for centre of screen for circle and positions
+  uint16_t y = _displaySprite->height() / 2;
   uint16_t radius = min(x, y) - _pitOffset; // Radius of the pit wall subtracts _pitOffset
   float positionX = 0;
   float positionY = 0;
@@ -129,16 +142,18 @@ void TurntableDisplay::_drawTurntable(Turntable *turntable) {
                     angle); // Calculate coordinates to plot each position indicator, draw these before the pit wall so
                             // it clears the centre
     if (index->getId() == 0) {
-      _displaySprite.drawWideLine(x, y, positionX, positionY, 6.0f, _homeColour);
+      _displaySprite->drawWideLine(x, y, positionX, positionY, 6.0f, _homeColour);
     } else {
-      _displaySprite.drawWideLine(x, y, positionX, positionY, 6.0f, _positionColour);
+      _displaySprite->drawWideLine(x, y, positionX, positionY, 6.0f, _positionColour);
     }
   }
-  _displaySprite.fillSmoothCircle(x, y, radius, _pitColour, _backgroundColour);
-  _displaySprite.fillSmoothCircle(x, y, radius - 3, _backgroundColour);
+  _displaySprite->fillSmoothCircle(x, y, radius, _pitColour, _backgroundColour);
+  _displaySprite->fillSmoothCircle(x, y, radius - 3, _backgroundColour);
 }
 
 void TurntableDisplay::_drawBridge(Turntable *turntable) {
+  if (!_displaySprite) // If no display sprite object, can't do and display updates
+    return;
   float angle = 0;
   bool isMoving = turntable->isMoving();
   for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
@@ -166,23 +181,25 @@ void TurntableDisplay::_drawBridge(Turntable *turntable) {
     bridgeColour = _backgroundColour;
     bridgeHomeEndColour = _backgroundColour;
   }
-  uint16_t halfBridgeLength = (min(_displaySprite.width(), _displaySprite.height()) / 2) - _pitOffset - 10;
+  uint16_t halfBridgeLength = (min(_displaySprite->width(), _displaySprite->height()) / 2) - _pitOffset - 10;
   uint16_t homeHalfBridgeLength = halfBridgeLength - 15;
-  _getCoordinates(_displaySprite.width() / 2, _displaySprite.height() / 2, &x, &y, homeHalfBridgeLength,
+  _getCoordinates(_displaySprite->width() / 2, _displaySprite->height() / 2, &x, &y, homeHalfBridgeLength,
                   angle); // Get coordinates for home end of bridge starting from display centre
-  _displaySprite.drawWideLine(_displaySprite.width() / 2, _displaySprite.height() / 2, x, y, 6.0f, bridgeColour);
+  _displaySprite->drawWideLine(_displaySprite->width() / 2, _displaySprite->height() / 2, x, y, 6.0f, bridgeColour);
   uint16_t homeX = x;
   uint16_t homeY = y;
   _getCoordinates(homeX, homeY, &x, &y, 15,
                   angle); // Get coordinates for the home end indicator starting from home end of the bridge
-  _displaySprite.drawWideLine(homeX, homeY, x, y, 6.0f, bridgeHomeEndColour);
+  _displaySprite->drawWideLine(homeX, homeY, x, y, 6.0f, bridgeHomeEndColour);
   angle += 180; // Add 180 degrees for other end of bridge
-  _getCoordinates(_displaySprite.width() / 2, _displaySprite.height() / 2, &x, &y, halfBridgeLength,
+  _getCoordinates(_displaySprite->width() / 2, _displaySprite->height() / 2, &x, &y, halfBridgeLength,
                   angle); // Get coordinates for other end starting from display centre
-  _displaySprite.drawWideLine(_displaySprite.width() / 2, _displaySprite.height() / 2, x, y, 6.0f, bridgeColour);
+  _displaySprite->drawWideLine(_displaySprite->width() / 2, _displaySprite->height() / 2, x, y, 6.0f, bridgeColour);
 }
 
 void TurntableDisplay::_drawPositionName(Turntable *turntable) {
+  if (!_displaySprite) // If no display sprite object, can't do and display updates
+    return;
   char *positionName = nullptr;
   for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
     if (index->getId() == _bridgePosition) {
@@ -190,16 +207,18 @@ void TurntableDisplay::_drawPositionName(Turntable *turntable) {
       break;
     }
   }
-  uint16_t x = _displaySprite.width() / 2;
-  uint16_t y = _displaySprite.height() / 2;
-  _displaySprite.setFreeFont(TEXT_FONT);
-  _displaySprite.setTextDatum(MC_DATUM);
+  uint16_t x = _displaySprite->width() / 2;
+  uint16_t y = _displaySprite->height() / 2;
+  _displaySprite->setFreeFont(TEXT_FONT);
+  _displaySprite->setTextDatum(MC_DATUM);
   if (_blinkState) {
-    _displaySprite.setTextColor(_positionTextColour);
+    _displaySprite->setTextColor(_positionTextColour);
   } else {
-    _displaySprite.setTextColor(_backgroundColour);
+    _displaySprite->setTextColor(_backgroundColour);
   }
-  _displaySprite.drawString(positionName, x, y);
+  if (positionName) {
+    _displaySprite->drawString(positionName, x, y);
+  }
 }
 
 // =========================================================================

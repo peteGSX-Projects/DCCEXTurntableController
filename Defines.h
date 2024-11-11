@@ -20,6 +20,9 @@
 
 #include <TFT_eSPI.h>
 
+#define SERIAL_CLIENT 1
+#define WIFI_CLIENT 2
+
 /*
 If we haven't got a custom config.h, use the example
 */
@@ -31,17 +34,51 @@ If we haven't got a custom config.h, use the example
 
 /*
 If not defined in myConfig.h, define the console and DCC-EX client connection streams here
+Default client type is serial
 */
 #ifndef CONSOLE
 #define CONSOLE Serial
 #endif // CONSOLE
+#ifndef CLIENT_TYPE
+#define CLIENT_TYPE SERIAL_CLIENT
+#endif // CLIENT_TYPE
 #ifndef CS_CONNECTION
+#if defined(ARDUINO_ARCH_STM32) // Blackpill default
 #define CS_CONNECTION Serial1
+#elif defined(ARDUINO_ARCH_ESP32) // ESP32 default
+#define CS_CONNECTION Serial2
+#endif // Device type
 #endif // CS_CONNECTION
+
+#if (CLIENT_TYPE == WIFI_CLIENT) // Only process WiFi details if that's the client type
+#if defined(ARDUINO_ARCH_STM32)  // If WiFi defined and using Blackpill, error
+#error "You cannot enable a WiFi client unless using the supported ESP32 microcontroller"
+#endif
+/*
+If not defined in myConfig.h, define placeholder WiFi connection details
+*/
+#ifndef WIFI_SSID
+#define WIFI_SSID "Your WiFi SSID Here"
+#endif // WIFI_SSID
+#ifndef WIFI_PASSWORD
+#define WIFI_PASSWORD "Your WiFi password here"
+#endif // WIFI_PASSWORD
+#ifndef COMMANDSTATION_IP
+#define COMMANDSTATION_IP "192.168.4.1"
+#endif // COMMANDSTATION_IP
+#ifndef COMMANDSTATION_PORT
+#define COMMANDSTATION_PORT 2560
+#endif // COMMANDSTATION_PORT
+#ifndef ENABLE_HEARTBEAT
+#define ENABLE_HEARTBEAT 60000
+#endif // ENABLE_HEARTBEAT
+
+#endif // CLIENT_TYPE==WIFI_CLIENT
 
 /*
 If not defined in myConfig.h, define the rotary encoder pins and options here
 */
+#if defined(ARDUINO_ARCH_STM32) // Blackpill defaults
 #ifndef ROTARY_BTN
 #define ROTARY_BTN PB15
 #endif // ROTARY_BTN
@@ -50,7 +87,18 @@ If not defined in myConfig.h, define the rotary encoder pins and options here
 #endif // ROTARY_DT
 #ifndef ROTARY_CLK
 #define ROTARY_CLK PB13
+#endif                            // ROTARY_CLK
+#elif defined(ARDUINO_ARCH_ESP32) // ESP32 defaults
+#ifndef ROTARY_BTN
+#define ROTARY_BTN 25
+#endif // ROTARY_BTN
+#ifndef ROTARY_DT
+#define ROTARY_DT 26
+#endif // ROTARY_DT
+#ifndef ROTARY_CLK
+#define ROTARY_CLK 27
 #endif // ROTARY_CLK
+#endif // ARCH type
 #ifndef FULL_STEP
 #define HALF_STEP
 #endif // FULL_STEP
@@ -59,9 +107,15 @@ If not defined in myConfig.h, define the rotary encoder pins and options here
 If not defined in myConfig.h, define the GC9A01 display pins here
 Note only backlight is defined here, the rest should be in the TFT_eSPI config
 */
+#if defined(ARDUINO_ARCH_STM32) // Blackpill defaults
 #ifndef GC9A01_BL
 #define GC9A01_BL PA1
+#endif                            // GC9A01_BL
+#elif defined(ARDUINO_ARCH_ESP32) // ESP32 defaults
+#ifndef GC9A01_BL
+#define GC9A01_BL 21
 #endif // GC9A01_BL
+#endif // ARCH type
 
 /*
 If not defined in myConfig.h, define GC9A01 default options here
@@ -118,15 +172,5 @@ If not defined in myConfig.h, define turntable display parameters here
 #ifndef PIT_OFFSET
 #define PIT_OFFSET 30
 #endif // PIT_OFFSET
-
-/*
-Colour definitions and fonts for the DCC-EX logo
-*/
-#define DCCEX_DCC 0x01C8
-#define DCCEX_EX 0x03B6
-#define DCCEX_BACKGROUND 0xFFFF
-#define DCCEX_FONT &FreeSansBold12pt7b
-#define DCCEX_SMALL_FONT &FreeMono9pt7b
-#define DCCEX_VERSION_FONT &FreeMonoBold9pt7b
 
 #endif // DEFINES_H
