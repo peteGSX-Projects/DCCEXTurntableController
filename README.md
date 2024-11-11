@@ -4,6 +4,8 @@ This is a controller for DCC-EX turntables, operating as a native DCC-EX protoco
 
 Turntable operations are displayed on a round LCD.
 
+This README is very brief, and for the full documentation refer to [Pete's Pages](https://petegsx-projects.github.io/dcc-ex-turntable-controller/index.html).
+
 ## Hardware required
 
 This software has been written explicitly for an STM32F411CEU6 Blackpill microprocessor, with a connected rotary encoder and GC9A01 based LCD.
