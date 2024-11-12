@@ -173,4 +173,11 @@ If not defined in myConfig.h, define turntable display parameters here
 #define PIT_OFFSET 30
 #endif // PIT_OFFSET
 
+/*
+If not defined in myConfig.h, define the turntable selection here
+*/
+#ifndef TURNTABLE_ID
+#define TURNTABLE_ID 0
+#endif // TURNTABLE_ID
+
 #endif // DEFINES_H

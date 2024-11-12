@@ -18,41 +18,41 @@
 #include "Defines.h"
 #include "TurntableDisplay.h"
 
-TurntableDisplay::TurntableDisplay(TFT_eSprite *displaySprite, DCCEXProtocol *csClient, uint16_t backgroundColour,
-                                   uint8_t pitOffset, uint16_t pitColour, uint16_t homeColour, uint16_t positionColour,
+TurntableDisplay::TurntableDisplay(TFT_eSprite *displaySprite, uint16_t backgroundColour, uint8_t pitOffset,
+                                   uint16_t pitColour, uint16_t homeColour, uint16_t positionColour,
                                    uint16_t bridgeColour, uint16_t bridgeMovingColour, uint16_t bridgePositionColour,
                                    uint16_t positionTextColour, unsigned long blinkDelay)
-    : _displaySprite(displaySprite), _csClient(csClient), _backgroundColour(backgroundColour), _pitOffset(pitOffset),
-      _pitColour(pitColour), _homeColour(homeColour), _positionColour(positionColour), _bridgeColour(bridgeColour),
+    : _displaySprite(displaySprite), _backgroundColour(backgroundColour), _pitOffset(pitOffset), _pitColour(pitColour),
+      _homeColour(homeColour), _positionColour(positionColour), _bridgeColour(bridgeColour),
       _bridgeMovingColour(bridgeMovingColour), _bridgePositionColour(bridgePositionColour),
       _positionTextColour(positionTextColour), _blinkDelay(blinkDelay) {
-  _bridgePosition = 0; // Start at home, will update once begin called
-  _lastBlinkTime = 0;  // Default time to 0
-  _blinkState = true;  // Default to bridge and text being displayed
-  _needsRedraw = true; // Default to needing to draw the display
-  _homeAngle = 0;      // Default to home at 0 degrees
+  _turntable = nullptr; // Default to nullptr for the turntable
+  _bridgePosition = 0;  // Start at home, will update once begin called
+  _lastBlinkTime = 0;   // Default time to 0
+  _blinkState = true;   // Default to bridge and text being displayed
+  _needsRedraw = true;  // Default to needing to draw the display
+  _homeAngle = 0;       // Default to home at 0 degrees
 }
 
-void TurntableDisplay::begin() {
-  if (!_csClient) // If no client, can't process any turntable objects
+void TurntableDisplay::begin(Turntable *turntable) {
+  if (!turntable) // If no client, can't process any turntable objects
     return;
-  Turntable *turntable = _csClient->turntables->getFirst();
-  if (turntable) {
-    setPosition(turntable->getIndex()); // Set initial position
+  _turntable = turntable;
+  if (_turntable) {
+    setPosition(_turntable->getIndex()); // Set initial position
   }
 }
+
+Turntable *TurntableDisplay::getTurntable() { return _turntable; }
 
 void TurntableDisplay::update() {
   if (!_displaySprite) // If no display sprite object, can't do and display updates
     return;
-  if (!_csClient) // If no client, can't process any turntable objects
+  if (!_turntable) // If no turntable, can't process any turntable objects
     return;
   if (!_needsRedraw) // Only update if redraw flagged
     return;
-  Turntable *turntable = _csClient->turntables->getFirst();
-  if (!turntable) // If we don't have a turntable object, can't do anything
-    return;
-  bool isMoving = turntable->isMoving();
+  bool isMoving = _turntable->isMoving();
   unsigned long currentTime = millis();
   if (isMoving && (currentTime - _lastBlinkTime > _blinkDelay)) { // Blink at the defined rate
     _lastBlinkTime = currentTime;
@@ -61,21 +61,18 @@ void TurntableDisplay::update() {
     _needsRedraw = false;
     _blinkState = true;
   }
-  _drawTurntable(turntable);
-  _drawBridge(turntable);
-  _drawPositionName(turntable);
+  _drawTurntable();
+  _drawBridge();
+  _drawPositionName();
   _displaySprite->pushSprite(0, 0);
 }
 
 void TurntableDisplay::setNextPosition() {
-  if (!_csClient) // If no client, can't process any turntable objects
+  if (!_turntable) // No turntable object, don't try to do anything
     return;
-  Turntable *turntable = _csClient->turntables->getFirst();
-  if (!turntable) // No turntable object, don't try to do anything
+  if (_turntable->isMoving()) // If moving, don't allow other changes
     return;
-  if (turntable->isMoving()) // If moving, don't allow other changes
-    return;
-  uint8_t maxPosition = turntable->getIndexCount() - 1;
+  uint8_t maxPosition = _turntable->getIndexCount() - 1;
   if (maxPosition == 0) // If we only have home, don't try to do anything
     return;
   if (_bridgePosition == maxPosition) {
@@ -89,14 +86,11 @@ void TurntableDisplay::setNextPosition() {
 }
 
 void TurntableDisplay::setPreviousPosition() {
-  if (!_csClient) // If no client, can't process any turntable objects
+  if (!_turntable) // No turntable object, don't try to do anything
     return;
-  Turntable *turntable = _csClient->turntables->getFirst();
-  if (!turntable) // No turntable object, don't try to do anything
+  if (_turntable->isMoving()) // If moving, don't allow other changes
     return;
-  if (turntable->isMoving()) // If moving, don't allow other changes
-    return;
-  uint8_t maxPosition = turntable->getIndexCount() - 1;
+  uint8_t maxPosition = _turntable->getIndexCount() - 1;
   if (maxPosition == 0) // If we only have home, don't try to do anything
     return;
   if (_bridgePosition == 0) {
@@ -110,10 +104,7 @@ void TurntableDisplay::setPreviousPosition() {
 }
 
 void TurntableDisplay::setPosition(uint8_t position) {
-  if (!_csClient) // If no client, can't process any turntable objects
-    return;
-  Turntable *turntable = _csClient->turntables->getFirst();
-  if (!turntable)
+  if (!_turntable)
     return;
   _bridgePosition = position;
   _needsRedraw = true;
@@ -121,7 +112,9 @@ void TurntableDisplay::setPosition(uint8_t position) {
 
 uint8_t TurntableDisplay::getPosition() { return _bridgePosition; }
 
-void TurntableDisplay::_drawTurntable(Turntable *turntable) {
+void TurntableDisplay::_drawTurntable() {
+  if (!_turntable)
+    return;
   if (!_displaySprite) // If no display sprite object, can't do and display updates
     return;
   _displaySprite->fillSprite(_backgroundColour); // Clear screen
@@ -131,7 +124,7 @@ void TurntableDisplay::_drawTurntable(Turntable *turntable) {
   float positionX = 0;
   float positionY = 0;
   float angle = 0;
-  for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
+  for (TurntableIndex *index = _turntable->getFirstIndex(); index; index = index->getNextIndex()) {
     if (index->getId() == 0) { // First index will always be home, so safe to get its angle here
       _homeAngle = index->getAngle() / 10;
       angle = _homeAngle;
@@ -151,12 +144,14 @@ void TurntableDisplay::_drawTurntable(Turntable *turntable) {
   _displaySprite->fillSmoothCircle(x, y, radius - 3, _backgroundColour);
 }
 
-void TurntableDisplay::_drawBridge(Turntable *turntable) {
+void TurntableDisplay::_drawBridge() {
+  if (!_turntable)
+    return;
   if (!_displaySprite) // If no display sprite object, can't do and display updates
     return;
   float angle = 0;
-  bool isMoving = turntable->isMoving();
-  for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
+  bool isMoving = _turntable->isMoving();
+  for (TurntableIndex *index = _turntable->getFirstIndex(); index; index = index->getNextIndex()) {
     if (index->getId() == _bridgePosition) {
       if (_bridgePosition == 0) {
         angle = _homeAngle;
@@ -171,7 +166,7 @@ void TurntableDisplay::_drawBridge(Turntable *turntable) {
   uint16_t bridgeColour;
   uint16_t bridgeHomeEndColour;
   if (_blinkState) {
-    if (isMoving || (_bridgePosition != turntable->getIndex())) {
+    if (isMoving || (_bridgePosition != _turntable->getIndex())) {
       bridgeColour = _bridgeMovingColour;
     } else {
       bridgeColour = _bridgeColour;
@@ -197,11 +192,13 @@ void TurntableDisplay::_drawBridge(Turntable *turntable) {
   _displaySprite->drawWideLine(_displaySprite->width() / 2, _displaySprite->height() / 2, x, y, 6.0f, bridgeColour);
 }
 
-void TurntableDisplay::_drawPositionName(Turntable *turntable) {
+void TurntableDisplay::_drawPositionName() {
+  if (!_turntable)
+    return;
   if (!_displaySprite) // If no display sprite object, can't do and display updates
     return;
   char *positionName = nullptr;
-  for (TurntableIndex *index = turntable->getFirstIndex(); index; index = index->getNextIndex()) {
+  for (TurntableIndex *index = _turntable->getFirstIndex(); index; index = index->getNextIndex()) {
     if (index->getId() == _bridgePosition) {
       positionName = index->getName();
       break;

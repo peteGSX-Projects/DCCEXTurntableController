@@ -18,9 +18,12 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define VERSION "0.0.7"
+#define VERSION "0.0.8"
 
 /*
+0.0.8 includes:
+  - Refactor TurntableDisplay class to only utilise a turntable object
+  - Allow user to specify a turntable object ID to operate
 0.0.7 includes:
   - Add support for ESP32 as both WiFi and serial client
   - Set TFT_eSprite to 8 bit colour to fit in RAM

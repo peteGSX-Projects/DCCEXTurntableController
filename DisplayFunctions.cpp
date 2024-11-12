@@ -25,7 +25,7 @@
 TFT_eSPI display = TFT_eSPI();
 TFT_eSprite displaySprite = TFT_eSprite(&display);
 TurntableDisplay turntableDisplay =
-    TurntableDisplay(&displaySprite, &csClient, BACKGROUND_COLOUR, PIT_OFFSET, PIT_COLOUR, HOME_COLOUR, POSITION_COLOUR,
+    TurntableDisplay(&displaySprite, BACKGROUND_COLOUR, PIT_OFFSET, PIT_COLOUR, HOME_COLOUR, POSITION_COLOUR,
                      BRIDGE_COLOUR, BRIDGE_MOVING_COLOUR, BRIDGE_POSITION_COLOUR, POSITION_TEXT_COLOUR, BLINK_DELAY);
 uint16_t statusX;
 uint16_t statusY;
@@ -94,7 +94,17 @@ void displayRetrievingInfo() {
   displayStatus("Retrieve turntable...");
 }
 
-void createTurntableDisplay() { turntableDisplay.begin(); }
+void createTurntableDisplay() {
+  Turntable *turntable = nullptr;
+  if (TURNTABLE_ID == 0) { // If no user ID has been specified, get first turntable
+    turntable = csClient.turntables->getFirst();
+  } else { // Otherwise get the specified turntable by ID
+    turntable = csClient.turntables->getById(TURNTABLE_ID);
+  }
+  if (turntable) {
+    turntableDisplay.begin(turntable);
+  }
+}
 
 void updateDisplay() { turntableDisplay.update(); }
 

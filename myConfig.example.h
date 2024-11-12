@@ -35,6 +35,11 @@ If defining WIFI_CLIENT, set your WiFi and CommandStation details here
 // #define COMMANDSTATION_PORT 2560
 
 /*
+If you have multiple turntable objects and want to select anything other than the first, specify the ID here
+*/
+// #define TURNTABLE_ID 0 // Default to 0, which is get the first defined turntable
+
+/*
 If required, define the rotary encoder pins and options here
 */
 // #define ROTARY_BTN PB15 // Blackpill default

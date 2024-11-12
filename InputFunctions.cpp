@@ -42,17 +42,13 @@ void processEncoder() {
   byte direction = encoder.process();
   if (direction == DIR_CW) {
     turntableDisplay.setNextPosition();
-    CONSOLE.print("User set to position ");
-    CONSOLE.println(turntableDisplay.getPosition());
   } else if (direction == DIR_CCW) {
     turntableDisplay.setPreviousPosition();
-    CONSOLE.print("User set to position ");
-    CONSOLE.println(turntableDisplay.getPosition());
   }
 }
 
 void sendPositionChange() {
-  Turntable *turntable = csClient.turntables->getFirst();
+  Turntable *turntable = turntableDisplay.getTurntable();
   if (turntable) {
     if (turntableDisplay.getPosition() != turntable->getIndex()) {
       if (turntableDisplay.getPosition() == 0) {
@@ -65,7 +61,7 @@ void sendPositionChange() {
 }
 
 void sendHome() {
-  Turntable *turntable = csClient.turntables->getFirst();
+  Turntable *turntable = turntableDisplay.getTurntable();
   if (turntable) {
     csClient.rotateTurntable(turntable->getId(), 0, 2);
   }
