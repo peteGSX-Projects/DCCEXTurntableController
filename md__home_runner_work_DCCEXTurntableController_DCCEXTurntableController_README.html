@@ -71,26 +71,38 @@ $(function() {
 <p>This README is very brief, and for the full documentation refer to <a href="https://petegsx-projects.github.io/dcc-ex-turntable-controller/index.html">Pete's Pages</a>.</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Hardware required</h1>
-<p>This software has been written explicitly for an STM32F411CEU6 Blackpill microprocessor, with a connected rotary encoder and GC9A01 based LCD.</p>
-<p>It also requires a serial connection to a DCC-EX CommandStation.</p>
-<p>A future version may implement support for an ESP32 based microprocessor to provide a WiFi client connection to the DCC-EX CommandStation.</p>
+<p>This software has been written for either an STM32F411CEU6 Blackpill or Espressif ESP32 Dev board, with a connected rotary encoder and GC9A01 based LCD.</p>
+<p>It also requires a serial connection to a DCC-EX CommandStation (either Blackpill or ESP32), or a WiFi connection (ESP32 only).</p>
 <h2><a class="anchor" id="autotoc_md2"></a>
 Pins and connections</h2>
-<p>The below pins are used on the Blackpill to connect to the CommandStation's serial port, rotary encoder, and GC9A01 LCD.</p>
-<p>Remember to cross Rx/Tx so that the Blackpill Rx connects to the CommandStation's Tx, and vice versa. Also be sure to connect a common ground, and take into account if the CommandStation uses 3.3V or 5V logic, as the Blackpill is a 3.3V uC.</p>
-<ul>
-<li>Serial Rx - PA10</li>
-<li>Serial Tx - PA9</li>
-<li><a class="el" href="classRotary.html">Rotary</a> encoder button - PB15</li>
-<li><a class="el" href="classRotary.html">Rotary</a> encoder DT - PB14</li>
-<li><a class="el" href="classRotary.html">Rotary</a> encoder CLK - PB13</li>
-<li>GC9A01 DIN - PA7</li>
-<li>GC9A01 CLK - PA5</li>
-<li>GC9A01 CS - PA4</li>
-<li>GC9A01 DC - PA3</li>
-<li>GC9A01 RST - PA2</li>
-<li>GC9A01 BL - PA1</li>
-</ul>
+<p>The below pins are used to connect to the CommandStation's serial port, rotary encoder, and GC9A01 LCD.</p>
+<p>Remember to cross Rx/Tx so that the Blackpill/ESP32 Rx connects to the CommandStation's Tx, and vice versa. Also be sure to connect a common ground, and take into account if the CommandStation uses 3.3V or 5V logic, as both the Blackpill and ESP32 are 3.3V uCs.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Connection   </th><th class="markdownTableHeadNone">Blackpill pin   </th><th class="markdownTableHeadNone">ESP32 pin    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Serial Rx   </td><td class="markdownTableBodyNone">PA10   </td><td class="markdownTableBodyNone">16    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Serial Tx   </td><td class="markdownTableBodyNone">PA9   </td><td class="markdownTableBodyNone">17    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a class="el" href="classRotary.html">Rotary</a> encoder button   </td><td class="markdownTableBodyNone">PB15   </td><td class="markdownTableBodyNone">25    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a class="el" href="classRotary.html">Rotary</a> encoder DT   </td><td class="markdownTableBodyNone">PB14   </td><td class="markdownTableBodyNone">26    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a class="el" href="classRotary.html">Rotary</a> encoder CLK   </td><td class="markdownTableBodyNone">PB13   </td><td class="markdownTableBodyNone">27    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">GC9A01 DIN   </td><td class="markdownTableBodyNone">PA7   </td><td class="markdownTableBodyNone">19    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">GC9A01 CLK   </td><td class="markdownTableBodyNone">PA5   </td><td class="markdownTableBodyNone">18    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">GC9A01 CS   </td><td class="markdownTableBodyNone">PA4   </td><td class="markdownTableBodyNone">15    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">GC9A01 DC   </td><td class="markdownTableBodyNone">PA3   </td><td class="markdownTableBodyNone">2    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">GC9A01 RST   </td><td class="markdownTableBodyNone">PA2   </td><td class="markdownTableBodyNone">4    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">GC9A01 BL   </td><td class="markdownTableBodyNone">PA1   </td><td class="markdownTableBodyNone">21   </td></tr>
+</table>
 <h1><a class="anchor" id="autotoc_md3"></a>
 Installation and configuration</h1>
 <p>This repository is setup to enable PlatformIO to be used with VSCode and will automatically install the required libraries:</p>
@@ -101,6 +113,7 @@ Installation and configuration</h1>
 </ul>
 <p>If you prefer, you can also use the Arduino IDE, which means you will need to:</p>
 <ul>
+<li>Install board support for both STM32 and Espressif boards</li>
 <li>Install the above libraries</li>
 <li>Configure TFT_eSPI manually according to the <a href="https://github.com/Bodmer/TFT_eSPI">library's documentation</a></li>
 </ul>
