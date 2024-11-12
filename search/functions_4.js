@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['turntabledisplay_22',['TurntableDisplay',['../classTurntableDisplay.html#a3597563cfa20e78986315dffef64b719',1,'TurntableDisplay']]]
+  ['turntabledisplay_24',['TurntableDisplay',['../classTurntableDisplay.html#a993f0b05faa151ba901f39e3b465198b',1,'TurntableDisplay']]]
 ];
