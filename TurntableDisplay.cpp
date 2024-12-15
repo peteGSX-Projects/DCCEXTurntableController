@@ -197,7 +197,7 @@ void TurntableDisplay::_drawPositionName() {
     return;
   if (!_displaySprite) // If no display sprite object, can't do and display updates
     return;
-  char *positionName = nullptr;
+  const char *positionName = nullptr;
   for (TurntableIndex *index = _turntable->getFirstIndex(); index; index = index->getNextIndex()) {
     if (index->getId() == _bridgePosition) {
       positionName = index->getName();
