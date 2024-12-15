@@ -33,6 +33,13 @@ If we haven't got a custom config.h, use the example
 #endif
 
 /*
+Ensure only a supported Arduino type is being used, otherwise error
+*/
+#if !defined(ARDUINO_ARCH_ESP32) && !defined(ARDUINO_BLACKPILL_F411CE)
+#error This Arduino type is unsupported, you must be using an ESP32 or Blackpill F411CE
+#endif // TYPE
+
+/*
 If not defined in myConfig.h, define the console and DCC-EX client connection streams here
 Default client type is serial
 */

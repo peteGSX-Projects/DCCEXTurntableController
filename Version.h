@@ -18,9 +18,11 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define VERSION "0.0.9"
+#define VERSION "0.0.10"
 
 /*
+0.0.10 includes:
+  - Generate compiler error if using an unsupported platform
 0.0.9 includes:
   - Minor change to cater for the upcoming DCCEXProtocol library 1.0.0 release
 0.0.8 includes:
