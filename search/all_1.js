@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['cslistener_1',['CSListener',['../classCSListener.html',1,'']]]
+  ['begin_0',['begin',['../classTurntableDisplay.html#adbf6033d79c49ec9cce3dc486f859765',1,'TurntableDisplay']]]
 ];

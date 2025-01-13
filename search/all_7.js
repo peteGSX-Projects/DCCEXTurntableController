@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['update_12',['update',['../classTurntableDisplay.html#add030c1456d7d4b9c1c6dee88c0b4c68',1,'TurntableDisplay']]]
+  ['installation_20and_20configuration_0',['Installation and configuration',['../md__2home_2runner_2work_2DCCEXTurntableController_2DCCEXTurntableController_2README.html#autotoc_md3',1,'']]]
 ];

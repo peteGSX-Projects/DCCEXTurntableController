@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['turntabledisplay_11',['TurntableDisplay',['../classTurntableDisplay.html',1,'TurntableDisplay'],['../classTurntableDisplay.html#a993f0b05faa151ba901f39e3b465198b',1,'TurntableDisplay::TurntableDisplay()']]]
+  ['hardware_20required_0',['Hardware required',['../md__2home_2runner_2work_2DCCEXTurntableController_2DCCEXTurntableController_2README.html#autotoc_md1',1,'']]]
 ];

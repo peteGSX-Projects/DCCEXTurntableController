@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['setnextposition_8',['setNextPosition',['../classTurntableDisplay.html#ad7b4baadb0d098fb797ef05f38a482a2',1,'TurntableDisplay']]],
-  ['setposition_9',['setPosition',['../classTurntableDisplay.html#a9570665525c0e6ca3b6087b563af6c07',1,'TurntableDisplay']]],
-  ['setpreviousposition_10',['setPreviousPosition',['../classTurntableDisplay.html#a19d7e8c56a3a3688fac874694ab42b3f',1,'TurntableDisplay']]]
+  ['getposition_0',['getPosition',['../classTurntableDisplay.html#a98e42175640a69ab057224a7e6008c19',1,'TurntableDisplay']]],
+  ['getturntable_1',['getTurntable',['../classTurntableDisplay.html#af65e68f00387fba8c32357de45368c94',1,'TurntableDisplay']]]
 ];
